@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chitra</title>
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{webjars/bootstrap/5.0.1/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{webjars/font-awesome/5.15.3/css/fontawesome.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+</head>
+
+<body>
+<div class="border py-4"></div>
+<!-- Products items start -->
+<!--<div class="text-center">
+    <h4>Error Page</h4>
+</div>-->
+<!--<div class="row my-2">
+    <div class="col-4"></div>
+    <div class="col-4">
+        <div class="mb-3">
+            <label for="error" class="form-label">Error</label>
+            <input type="text" id="error" th:value="${exception}" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="url" class="form-label">Requested URL</label>
+            <input type="text" id="url" th:value="${url}">
+        </div>
+        <button type="submit" class="btn btn-primary">Home</button>
+    </div>
+    <div class="col-4"></div>
+</div>-->
+<div class="card text-center">
+    <div class="card-header">
+        Error On Processing Request
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Error</h5>
+        <p class="card-text" th:text="${exception}">error</p>
+        <p class="card-text" th:text="${url}">Requested URL</p>
+        <a class="btn btn-primary" th:href="@{/}">Go to home</a>
+    </div>
+    <div class="card-footer text-muted">
+        Oops Something Went Wrong
+    </div>
+</div>
+<!-- Products items End -->
+<script type="text/javascript" th:src="@{webjars/bootstrap/5.0.1/js/bootstrap.bundle.min.js}"></script>
+</body>
+
+</html>

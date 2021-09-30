@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="fragments/head :: head">
+</head>
+
+<body>
+<div class="container-fluid m-0 p-0">
+    <!-- header -->
+    <div class="p-2">
+        <!--            <div th:replace="fragments/header :: header">Header</div>-->
+        <div th:replace="${#strings.isEmpty(userDetail.email)} ?
+        ~{fragments/header.html :: header} :
+        ~{fragments/headerwithuser.html :: headerwithuser}">
+        </div>
+        <!-- navbar start -->
+        <div th:replace="fragments/navbar :: navbar">Nav Bar</div>
+        <!-- navbar end -->
+    </div>
+    <!-- header end -->
+    <div class="row">
+        <div class="col-8 border">
+            <div class="card">
+                <div class=" row g-0">
+                    <div class="col-md-4">
+                        <img src="../static/images/productdetail.JPG" th:src="@{images/productdetail.JPG}"
+                             class="img-thumbnail" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h5 class="card-title">products</h5>
+                                </div>
+                                <div class="col-6">
+                                    <p class="card-text float-end">Price: $5,555/-</p>
+                                </div>
+                            </div>
+                            <p class="card-text"><small class="text-muted">discount</small></p>
+                            <div class="dropdown mb-2">
+                                <button class="btn btn-secondary dropdown-toggle" type="button"
+                                        id="quantity2" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Quantity
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    <li><a class="dropdown-item" href="#">1</a></li>
+                                    <li><a class="dropdown-item" href="#">2</a></li>
+                                    <li><a class="dropdown-item" href="#">3</a></li>
+                                </ul>
+                            </div>
+                            <button type="button" class="btn btn-outline-success">Delete</button>
+                            <button type="button" class="btn btn-outline-success">Add to future list</button>
+                            <button type="button" class="btn btn-outline-success">Success</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-8 border">
+            <div class="card">
+                <div class=" row g-0">
+                    <div class="col-md-4">
+                        <img src="../static/images/productdetail.JPG" th:src="@{images/productdetail.JPG}"
+                             class="img-thumbnail" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h5 class="card-title">products</h5>
+                                </div>
+                                <div class="col-6">
+                                    <p class="card-text float-end">Price: $5,555/-</p>
+                                </div>
+                            </div>
+                            <p class="card-text"><small class="text-muted">discount</small></p>
+                            <div class="dropdown mb-2">
+                                <button class="btn btn-secondary dropdown-toggle" type="button"
+                                        id="quantity3" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Quantity
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    <li><a class="dropdown-item" href="#">1</a></li>
+                                    <li><a class="dropdown-item" href="#">2</a></li>
+                                    <li><a class="dropdown-item" href="#">3</a></li>
+                                </ul>
+                            </div>
+                            <button type="button" class="btn btn-outline-success">Delete</button>
+                            <button type="button" class="btn btn-outline-success">Add to future list</button>
+                            <button type="button" class="btn btn-outline-success">Success</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-8 border">
+            <div class="card">
+                <div class=" row g-0">
+                    <div class="col-md-4">
+                        <img src="../static/images/productdetail.JPG" th:src="@{images/productdetail.JPG}"
+                             class="img-thumbnail" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h5 class="card-title">products</h5>
+                                </div>
+                                <div class="col-6">
+                                    <p class="card-text float-end">Price: $5,555/-</p>
+                                </div>
+                            </div>
+                            <p class="card-text"><small class="text-muted">discount</small></p>
+                            <div class="dropdown mb-2">
+                                <button class="btn btn-secondary dropdown-toggle" type="button"
+                                        id="quantity1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Quantity
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    <li><a class="dropdown-item" href="#">1</a></li>
+                                    <li><a class="dropdown-item" href="#">2</a></li>
+                                    <li><a class="dropdown-item" href="#">3</a></li>
+                                </ul>
+                            </div>
+                            <button type="button" class="btn btn-outline-success">Delete</button>
+                            <button type="button" class="btn btn-outline-success">Add to future list</button>
+                            <button type="button" class="btn btn-outline-success">Success</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="col-8">
+        <div class="float-end"> SubTotal : $5,555/-</div>
+    </div>
+    <!-- Products items End -->
+    <!-- footer start -->
+    <div th:replace="fragments/footer :: footer">footer</div>
+    <!-- footer end -->
+</div>
+
+<!-- Script -->
+<script type="text/javascript" th:src="@{webjars/bootstrap/5.0.1/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{webjars/font-awesome/5.15.3/js/all.min.js}"></script>
+</body>
+
+</html>

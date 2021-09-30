@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/head :: head">
+</head>
+
+<body>
+<div>
+    <header class="d-flex flex-column flex-md-row align-items-center  px-md-4  bg-light" th:fragment="headerwithuser">
+        <img src="../static/images/Logo-T.png" th:src="@{images/Logo-T.png}" alt="logo"
+             class="h5 my-0 me-md-auto fw-normal">
+        <nav class="my-2 my-md-0 me-md-3">
+            <a class="mx-4 p-1 " th:href="@{/cart}">
+                <i class="fa fa-shopping-cart"></i>
+            </a>
+        </nav>
+        <div class="dropdown p-2">
+            <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1"
+               data-bs-toggle="dropdown" aria-expanded="false">
+                User
+            </a>
+            <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+                <li><a class="dropdown-item" th:href="@{/profile}">Profile</a></li>
+                <li><a class="dropdown-item" th:href="@{/order}">Order</a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" th:href="@{/index}">Sign Out</a></li>
+            </ul>
+        </div>
+    </header>
+</div>
+<!-- Script -->
+<script type="text/javascript" th:src="@{webjars/bootstrap/5.0.1/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{webjars/font-awesome/5.15.3/js/all.min.js}"></script>
+</body>
+</html>

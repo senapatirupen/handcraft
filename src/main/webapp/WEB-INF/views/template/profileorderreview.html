@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chitra</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/all.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- Script -->
+    <script src="css/bootstrap.bundle.min.js"></script>
+
+    <style>
+        li {
+            list-style: none;
+        }
+
+        .star-rating {
+            direction: rtl;
+            display: inline-block;
+            padding: 20px
+        }
+
+        .star-rating input[type=radio] {
+            display: none
+        }
+
+        .star-rating label {
+            color: #bbb;
+            font-size: 18px;
+            padding: 0;
+            cursor: pointer;
+            -webkit-transition: all .3s ease-in-out;
+            transition: all .3s ease-in-out
+        }
+
+        .star-rating label:hover,
+        .star-rating label:hover~label,
+        .star-rating input[type=radio]:checked~label {
+            color: #f2b600
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="col-12 text-center">
+            <h3>Profile Order Detail</h3>
+        </div>
+        <div class="row">
+            <div class="col">
+            </div>
+        </div>
+    </div>
+    <!-- Products items start -->
+    <div class="container">
+        <div class="row pt-2">
+            <div class="col-3 p-1 border">
+                <img src="image/profileorder.JPG" alt="Product">
+                <p class="card-text ">Order Id: 54321</p>
+            </div>
+            <div class="col-6 border py-1">
+                <h6 class="card-title">Product Name One</h6>
+                <p class="card-text ">Total Price: ₹5,555/-</p>
+                <p class="card-text ">Order Placed: 01/01/2020</p>
+                <p class="card-text ">Deliver On: 01/01/2020 </p>
+            </div>
+            <div class="col-3 border py-1">
+                <button type="button" class="w-100 btn btn-sm btn-primary m-1">Order Detail</button>
+                <button type="button" class="w-100 btn btn-sm btn-primary m-1">Return/Replace</button>
+                <button type="button" class="w-100 btn btn-sm btn-primary m-1">Give Rating/Review</button>
+                <button type="button" class="w-100 btn btn-sm btn-primary m-1">Download Invoice</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4 text-center">
+                <h4>Rating</h4>
+                <div class="star-rating">
+                    <input id="star-5" type="radio" name="rating" value="star-5" />
+                    <label for="star-5" title="5 stars">
+                        <i class="active fa fa-star" aria-hidden="true"></i>
+                    </label>
+                    <input id="star-4" type="radio" name="rating" value="star-4" />
+                    <label for="star-4" title="4 stars">
+                        <i class="active fa fa-star" aria-hidden="true"></i>
+                    </label>
+                    <input id="star-3" type="radio" name="rating" value="star-3" />
+                    <label for="star-3" title="3 stars">
+                        <i class="active fa fa-star" aria-hidden="true"></i>
+                    </label>
+                    <input id="star-2" type="radio" name="rating" value="star-2" />
+                    <label for="star-2" title="2 stars">
+                        <i class="active fa fa-star" aria-hidden="true"></i>
+                    </label>
+                    <input id="star-1" type="radio" name="rating" value="star-1" />
+                    <label for="star-1" title="1 star">
+                        <i class="active fa fa-star" aria-hidden="true"></i>
+                    </label>
+                </div>
+            </div>
+            <div class="col-4">
+                <h4 class="text-center">Review</h4>
+                <form action="/action_page.php">
+                    <label for="review">Comment</label>
+                    <textarea id="review" name="review" rows="4" cols="50">
+                                            </textarea>
+                    <br><br>
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+                   </div>
+    </div>
+    <!-- Products items End -->
+</body>
+
+</html>

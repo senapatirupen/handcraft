@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="fragments/head :: head">
+</head>
+
+<body>
+<div class="container-fluid m-0 p-0">
+    <!-- header -->
+    <div class="p-2">
+        <div th:replace="fragments/header :: header">Header</div>
+        <!-- navbar start -->
+        <div th:replace="fragments/navbar :: navbar">Nav Bar</div>
+        <!-- navbar end -->
+    </div>
+    <!-- header end -->
+    <!-- Products items start-->
+    <div class="col-6">
+        <h3>1.Login/Sign up</h3>
+        <form>
+            <div class="row mb-3">
+                <label for="name" class="form-label">Name</label>
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="Name" aria-label="Name">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="mobile" class="form-label">Mobile Number</label>
+                <input type="text" class="form-control" id="mobile" aria-describedby="mobileHelp">
+                <div id="mobileHelp" class="form-text">We'll never share your Number with anyone
+                    else.
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
+                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="pass" class="form-label">Password</label>
+                <input type="password" class="form-control" id="pass">
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                <label class="form-check-label" for="exampleCheck1">Check me out</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+    <hr>
+    <div>
+        <h3>Delivery Address</h3>
+        <form class="row g-3">
+            <div class="col-md-4">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control is-valid" id="name" value="Mark" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label for="village_city" class="form-label">Village Or City</label>
+                <input type="text" class="form-control is-invalid" id="village_city"
+                       aria-describedby="validationServer03Feedback" required>
+                <div id="village_city_Feedback" class="invalid-feedback">
+                    Please provide a valid Village.
+                </div>
+                <div class="col-md-3">
+                    <label for="state" class="form-label">State</label>
+                    <select class="form-select is-invalid" id="state"
+                            aria-describedby="stateFeedback" required>
+                        <option selected disabled value="">Choose...</option>
+                        <option>odisha</option>
+                    </select>
+                    <div id="stateFeedback" class="invalid-feedback">
+                        Please select a valid state.
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label for="zip" class="form-label">Zip</label>
+                    <input type="text" class="form-control is-invalid" id="zip"
+                           aria-describedby="zipFeedback" required>
+                    <div id="zipFeedback" class="invalid-feedback">
+                        Please provide a valid zip.
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-check">
+                        <input class="form-check-input is-invalid" type="checkbox" value="" id="invalidCheck3"
+                               aria-describedby="invalidCheck3Feedback" required>
+                        <label class="form-check-label" for="invalidCheck3">
+                            Agree to terms and conditions
+                        </label>
+                        <div id="invalidCheck3Feedback" class="invalid-feedback">
+                            You must agree before submitting.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <button class="btn btn-primary" type="submit">Submit form</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- Products items End -->
+</div>
+<!-- Script -->
+<script type="text/javascript" th:src="@{webjars/bootstrap/5.0.1/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{webjars/font-awesome/5.15.3/js/all.min.js}"></script>
+</body>
+
+</html>

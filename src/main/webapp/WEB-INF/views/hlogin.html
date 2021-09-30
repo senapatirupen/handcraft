@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="template/craftlayout :: head">
+</head>
+
+<body>
+<!-- header -->
+<div class="p-2">
+    <div th:replace="template/craftlayout :: header">Header</div>
+    <!-- navbar start -->
+    <div th:replace="template/craftlayout :: navbar">Nav Bar</div>
+    <!-- navbar end -->
+</div>
+<!-- header end -->
+<div class="border py-4"></div>
+<!-- Products items start -->
+<div class="text-center">
+    <h4>Login</h4>
+</div>
+<div class="row my-2">
+    <div class="col-4"></div>
+    <div class="col-4">
+        <form action="#" th:action="@{/login}" th:object="${userDetail}" method="post">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="text" class="form-control" id="email" th:field="*{status}"
+                       aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" th:field="*{password}">
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+        <div class="#">
+            <a class="forgot m-2" href="#">Forgot Password</a><a class="forgot m-2" href="#">Forgot Email</a>
+        </div>
+    </div>
+    <div class="col-4"></div>
+</div>
+<!-- footer start -->
+<div th:replace="template/craftlayout :: footer">footer</div>
+<!-- footer end -->
+
+<!-- Script -->
+<script type="text/javascript" th:src="@{webjars/bootstrap/5.0.1/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{webjars/font-awesome/5.15.3/js/all.min.js}"></script>
+
+</body>
+
+</html>

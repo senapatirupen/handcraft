@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="fragments/head :: head">
+</head>
+
+<body>
+<div>
+    <header class="d-flex flex-column flex-md-row align-items-center  px-md-4  bg-light" th:fragment="header">
+        <img th:src="@{../../resources/images/Logo-T.png}" alt="logo"
+             class="h5 my-0 me-md-auto fw-normal">
+        <nav class="my-2 my-md-0 me-md-3">
+            <a class="mx-4 p-1 " th:href="@{/cart}">
+                <i class="fa fa-shopping-cart"></i>
+            </a>
+            <a class="btn bot mx-2" th:href="@{/login}">Log in</a>
+            <a class="btn bot mx-2" th:href="@{/signup}">Sign Up</a>
+        </nav>
+    </header>
+</div>
+</body>
+</html>

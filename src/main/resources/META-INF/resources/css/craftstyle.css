@@ -1,0 +1,35 @@
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: sans-serif;
+}
+
+.bot {
+    /* padding: 4px; */
+    font-family: robot;
+}
+
+.bot:hover {
+    color: rgb(62, 110, 14);
+    background-color: #EEEEEE;
+    nav a {
+        color: rgb(62, 110, 14);
+    }
+    .nav-item:hover {
+        color: rgb(62, 110, 14);
+        background-color: #EEEEEE;
+        border-radius: 5%;
+    }
+    right-section li {
+        font-size: medium;
+    }
+    footer {
+        background-image: url(../image/footerbackground.png);
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+    }
