@@ -1,63 +1,70 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:include="fragments/head :: head">
+<head th:include="template/craftlayout :: head">
 </head>
 
 <body>
 <div class="container-fluid m-0 p-0">
+
     <!-- header -->
     <div class="p-2">
-        <!--            <div th:replace="fragments/header :: header">Header</div>-->
-        <div th:replace="${#strings.isEmpty(userDetail.email)} ?
-        ~{fragments/header.html :: header} :
-        ~{fragments/headerwithuser.html :: headerwithuser}">
-        </div>
+        <div th:replace="template/craftlayout :: header">Header</div>
         <!-- navbar start -->
-        <div th:replace="fragments/navbar :: navbar">Nav Bar</div>
+        <div th:replace="template/craftlayout :: navbar">Nav Bar</div>
         <!-- navbar end -->
     </div>
     <!-- header end -->
-    <div class="row">
-        <div class="col-8 border">
+    <div>
+        <h3 class="text-center">Cart Detail</h3>
+    </div>
+    <div class="row m-4" th:if="${#lists.size(products) == 0}">
+        <div class="col-8 m-1">
             <div class="card">
                 <div class=" row g-0">
                     <div class="col-md-4">
-                        <img src="../static/images/productdetail.JPG" th:src="@{images/productdetail.JPG}"
-                             class="img-thumbnail" alt="...">
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-6">
-                                    <h5 class="card-title">products</h5>
-                                </div>
-                                <div class="col-6">
-                                    <p class="card-text float-end">Price: $5,555/-</p>
+                                    <h5 class="card-title">Please Add Some Product To Cart</h5>
                                 </div>
                             </div>
-                            <p class="card-text"><small class="text-muted">discount</small></p>
-                            <div class="dropdown mb-2">
-                                <button class="btn btn-secondary dropdown-toggle" type="button"
-                                        id="quantity2" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Quantity
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                    <li><a class="dropdown-item" href="#">1</a></li>
-                                    <li><a class="dropdown-item" href="#">2</a></li>
-                                    <li><a class="dropdown-item" href="#">3</a></li>
-                                </ul>
-                            </div>
-                            <button type="button" class="btn btn-outline-success">Delete</button>
-                            <button type="button" class="btn btn-outline-success">Add to future list</button>
-                            <button type="button" class="btn btn-outline-success">Success</button>
+                            <a class="btn btn-warning" th:href="@{/placeorder(name=${userDetail.username})}">View Products Ready To Place Order</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row m-4" th:each="product: ${products}">
+        <div class="col-8 m-1">
+            <div class="card">
+                <div class=" row g-0">
+                    <div class="col-md-2">
+                        <img src="../static/images/ganesh.jpeg" th:src="@{images/ganesh.jpeg}"
+                             class="img-thumbnail" alt="...">
+                    </div>
+                    <div class="col-md-10">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h5 class="card-title" th:text="${'Name: '+ product.name}">name</h5>
+                                </div>
+                                <div class="col-6">
+                                    <p class="card-text float-end">Price: May Differ</p>
+                                </div>
+                            </div>
+                            <p class="card-text"><small class="text-muted" th:text="${'Model: '+ product.model}">model</small></p>
+                            <button type="button" class="btn btn-warning">Remove From Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--<div class="row">
         <div class="col-8 border">
             <div class="card">
                 <div class=" row g-0">
@@ -134,20 +141,19 @@
                 </div>
             </div>
         </div>
-    </div>
-    <hr>
-    <div class="col-8">
-        <div class="float-end"> SubTotal : $5,555/-</div>
-    </div>
+    </div>-->
     <!-- Products items End -->
+    <div class="row m-4" th:if="${#lists.size(products) > 0}">
+        <div class="col-4 m-1">
+            <a class="btn btn-primary" th:href="@{/placeorder(name=${userDetail.username})}">Place Order</a>
+        </div>
+    </div>
     <!-- footer start -->
-    <div th:replace="fragments/footer :: footer">footer</div>
+    <div th:replace="template/craftlayout :: footer">footer</div>
     <!-- footer end -->
 </div>
-
-<!-- Script -->
-<script type="text/javascript" th:src="@{webjars/bootstrap/5.0.1/js/bootstrap.bundle.min.js}"></script>
-<script type="text/javascript" th:src="@{webjars/font-awesome/5.15.3/js/all.min.js}"></script>
+    <script type="text/javascript" th:src="@{webjars/bootstrap/5.0.1/js/bootstrap.bundle.min.js}"></script>
+    <script type="text/javascript" th:src="@{webjars/font-awesome/5.15.3/js/all.min.js}"></script>
 </body>
 
 </html>

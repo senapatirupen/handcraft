@@ -10,7 +10,6 @@ public class ShippingAddressTransformer {
         toShippingAddress.setLandmark(fromShippingAddress.getLandmark());
         toShippingAddress.setCountry(fromShippingAddress.getCountry());
         toShippingAddress.setState(fromShippingAddress.getState());
-        toShippingAddress.setCityVillage(fromShippingAddress.getCityVillage());
         toShippingAddress.setZipcode(fromShippingAddress.getZipcode());
         toShippingAddress.setType(fromShippingAddress.getType());
         return toShippingAddress;
@@ -25,7 +24,6 @@ public class ShippingAddressTransformer {
         toShippingAddress.setLandmark(fromShippingAddress.getLandmark());
         toShippingAddress.setCountry(fromShippingAddress.getCountry());
         toShippingAddress.setState(fromShippingAddress.getState());
-        toShippingAddress.setCityVillage(fromShippingAddress.getCityVillage());
         toShippingAddress.setZipcode(fromShippingAddress.getZipcode());
         toShippingAddress.setType(fromShippingAddress.getType());
         return toShippingAddress;

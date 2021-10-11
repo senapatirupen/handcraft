@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="template/craftlayout :: head">
+</head>
+
+<body>
+<div class="container-fluid m-0 p-0">
+<!-- header -->
+<div class="p-2">
+    <div th:replace="template/craftlayout :: header">Header</div>
+    <!-- navbar start -->
+    <div th:replace="template/craftlayout :: navbar">Nav Bar</div>
+    <!-- navbar end -->
+</div>
+<!-- header end -->
+        <div class="col-12 text-center"><h3>Delivery Details For Order</h3></div>
+        <!-- Products items start -->
+        <div class="row my-2" th:if="${#lists.size(products) == 0}">
+            <div class="col-5">
+                <h3>Sorry Currently You Do Not Have Any Product To Place Order</h3>
+            </div>
+        </div>
+        <div class="row m-4" th:if="${#lists.size(products) > 0}">
+            <div class="col-6 border">
+                <h5>Add New Delivery Address To Order</h5>
+                <form class="row g-3" action="#" th:action="@{/adddeliveryaddress}" th:object="${address}" method="post">
+                    <div class="col-6">
+                        <label for="addressLineOne" class="form-label pt-2">Address Line-1</label>
+                        <input type="text" class="form-control" id="addressLineOne"
+                               th:field="*{addressLineOne}">
+                    </div>
+                    <div class="col-6">
+                        <label for="addressLineTwo" class="form-label pt-2">Address Line-2</label>
+                        <input type="text" class="form-control" id="addressLineTwo"
+                               th:field="*{addressLineTwo}">
+                    </div>
+                    <div class="col-6">
+                        <label for="landmark" class="form-label">Landmark</label>
+                        <input type="text" class="form-control" id="landmark" placeholder="Landmark" th:field="*{landmark}">
+                    </div>
+                    <div class="col-4">
+                        <label for="country" class="form-label">Country</label>
+                        <input type="text" class="form-control" id="country" placeholder="Country" th:field="*{country}">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="inputState" class="form-label">State</label>
+                        <select id="inputState" class="form-select" th:field="*{state}">
+                            <!--                            <option value="Andaman &amp; Nicobar Islands">Andaman &amp; Nicobar Islands</option>-->
+                            <!--                            <option value="Andhra Pradesh">Andhra Pradesh</option>-->
+                            <!--                            <option value="Arunachal Pradesh">Arunachal Pradesh</option>-->
+                            <!--                            <option value="Assam">Assam</option>-->
+                            <!--                            <option value="Bihar">Bihar</option>-->
+                            <!--                            <option value="Chandigarh">Chandigarh</option>-->
+                            <!--                            <option value="Chhattisgarh">Chhattisgarh</option>-->
+                            <!--                            <option value="Dadra &amp; Nagar Haveli">Dadra &amp; Nagar Haveli</option>-->
+                            <!--                            <option value="Daman and Diu">Daman and Diu</option>-->
+                            <!--                            <option value="Delhi">Delhi</option>-->
+                            <!--                            <option value="Goa">Goa</option>-->
+                            <!--                            <option value="Gujarat">Gujarat</option>-->
+                            <!--                            <option value="Haryana">Haryana</option>-->
+                            <!--                            <option value="Himachal Pradesh">Himachal Pradesh</option>-->
+                            <!--                            <option value="Jammu &amp; Kashmir">Jammu &amp; Kashmir</option>-->
+                            <!--                            <option value="Jharkhand">Jharkhand</option>-->
+                            <option th:value="'Karnataka'" value="Karnataka">Karnataka</option>
+                            <!--                            <option value="Kerala">Kerala</option>-->
+                            <!--                            <option value="Ladakh">Ladakh</option>-->
+                            <!--                            <option value="Lakshadweep">Lakshadweep</option>-->
+                            <!--                            <option value="Madhya Pradesh">Madhya Pradesh</option>-->
+                            <!--                            <option value="Maharashtra">Maharashtra</option>-->
+                            <!--                            <option value="Manipur">Manipur</option>-->
+                            <!--                            <option value="Meghalaya">Meghalaya</option>-->
+                            <!--                            <option value="Mizoram">Mizoram</option>-->
+                            <!--                            <option value="Nagaland">Nagaland</option>-->
+                            <option th:value="'Odisha'" value="Odisha">Odisha</option>
+                            <!--                            <option value="Puducherry">Puducherry</option>-->
+                            <!--                            <option value="Punjab">Punjab</option>-->
+                            <!--                            <option value="Rajasthan">Rajasthan</option>-->
+                            <!--                            <option value="Sikkim">Sikkim</option>-->
+                            <!--                            <option value="Tamil Nadu">Tamil Nadu</option>-->
+                            <!--                            <option value="Telangana">Telangana</option>-->
+                            <!--                            <option value="Tripura">Tripura</option>-->
+                            <!--                            <option value="Uttarakhand">Uttarakhand</option>-->
+                            <!--                            <option value="Uttar Pradesh">Uttar Pradesh</option>-->
+                            <!--                            <option value="West Bengal">West Bengal</option>-->
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="inputZip" class="form-label">Zip Code</label>
+                        <input type="text" class="form-control" id="inputZip" th:field="*{zipcode}">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="inputType" class="form-label">Address Type</label>
+                        <select id="inputType" class="form-select" th:field="*{type}">
+                            <option th:value="'OFFICE'" value="OFFICE">Office</option>
+                            <option th:value="'HOME'" value="HOME">Home</option>
+                            <option th:value="'BILLING'" value="BILLING">Billing</option>
+                            <option th:value="'DELIVERY'" value="DELIVERY">Delivery</option>
+                        </select>
+                    </div>
+                    <hr>
+                    <h5>Or Select From Existing Addresses</h5>
+                    <div class="col-6">
+                        <label for="inputTypeAddress" class="form-label">Addresses</label>
+                        <select id="inputTypeAddress" class="form-select" th:field="*{status}">
+                            <!--<option th:value="'OFFICE'" value="OFFICE">Office</option>
+                            <option th:value="'HOME'" value="HOME">Home</option>
+                            <option th:value="'BILLING'" value="BILLING">Billing</option>
+                            <option th:value="'DELIVERY'" value="DELIVERY">Delivery</option>-->
+                            <option value="">Addresses</option>
+                            <option th:each="delivery : ${addresslist}" th:value="${delivery}" th:text="${delivery}"></option>
+                        </select>
+                    </div>
+                    <hr>
+                    <h5>Or Specify Your Self Pickup Date</h5>
+                    <div class="col-6">
+                        <label for="inputTypeVisit" class="form-label">Pickup Date</label>
+                        <input id="inputTypeVisit" type="date" th:field="*{status}"/>
+                    </div>
+                    <hr>
+                    <div class="col-12 p-2">
+                        <button type="submit" class="btn btn-primary">Add Delivery Detail</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-4 m-4 border">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Model</th>
+                        <th scope="col">Product Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="product: ${products}">
+                        <td th:text="${product.name}"></td>
+                        <td th:text="${product.model}"></td>
+                        <td th:text="${product.productStatus}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Products items End -->
+<!-- footer start -->
+<div th:replace="template/craftlayout :: footer">footer</div>
+<!-- footer end -->
+<script type="text/javascript" th:src="@{webjars/bootstrap/5.0.1/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{webjars/font-awesome/5.15.3/js/all.min.js}"></script>
+
+</body>
+
+</html>

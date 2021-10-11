@@ -19,15 +19,30 @@
             <img th:src="@{/resources/images/Logo-T.png}" alt="logo"
                  class="h5 my-0 me-md-auto fw-normal">
             <nav class="my-2 my-md-0 me-md-3">
-                <a class="mx-4 p-1 " th:href="@{/cart}">
+                <a class="mx-5 p-1 " th:href="@{/cart}">
                     <i class="fa fa-shopping-cart"></i>
                 </a>
-                <a class="btn bot mx-2" th:href="@{/hlogin}">Log in</a>
-                <a class="btn bot mx-2" th:href="@{/hsignup}">Sign Up</a>
+                <a sec:authorize="! isAuthenticated()" class="btn bot mx-2" th:href="@{/login}">Log in</a>
+                <a sec:authorize="! isAuthenticated()" class="btn bot mx-2" th:href="@{/signup}">Sign Up</a>
+                <div sec:authorize="isAuthenticated()" class="dropdown p-2">
+                    <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <em sec:authentication="name"></em>
+                    </a>
+                    <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+                        <li><a class="dropdown-item" th:href="@{/profile}">Profile</a></li>
+                        <li><a class="dropdown-item" th:href="@{/orders}">Orders</a></li>
+                        <li sec:authorize="hasRole('ADMIN')"><a class="dropdown-item" th:href="@{/product}">Admin</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" th:href="@{/logout}">Sign Out</a></li>
+                    </ul>
+                </div>
             </nav>
         </header>
 
-<!--        <header class="d-flex flex-column flex-md-row align-items-center  px-md-4  bg-light" th:fragment="headerwithuser">
+        <!--<header class="d-flex flex-column flex-md-row align-items-center  px-md-4  bg-light" th:fragment="headerwithuser">
             <img src="../static/images/Logo-T.png" th:src="@{images/Logo-T.png}" alt="logo"
                  class="h5 my-0 me-md-auto fw-normal">
             <nav class="my-2 my-md-0 me-md-3">
@@ -38,7 +53,7 @@
             <div class="dropdown p-2">
                 <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1"
                    data-bs-toggle="dropdown" aria-expanded="false">
-                    User
+                    <em sec:authentication="name"></em>
                 </a>
                 <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
                     <li><a class="dropdown-item" th:href="@{/profile}">Profile</a></li>
@@ -63,7 +78,7 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-0 mb-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" th:href="@{/index}">Home</a>
+                                <a class="nav-link active" aria-current="page" th:href="@{/}">Home</a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -132,7 +147,112 @@
             </button>
         </div>
 
-        <div class=" container-fluid m-0 p-0" th:fragment="footer">
+        <div class="container" th:fragment="products">
+            <!-- Products items start -->
+            <div class="p-5">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                    <div class="card m-2 p-4" style="width: 15rem;">
+                        <img src="../static/images/a3.jpg" th:src="@{images/a3.jpg}" class="card-img-top" alt="image">
+                        <div class="card-body text-center">
+                            <!-- <h5 class="card-title">Patachitra</h5> -->
+                            <p class="card-text">Handcraft</p>
+                            <a class="btn btn-warning" th:href="@{/products}">View</a>
+                        </div>
+                    </div>
+                    <div class="card m-2 p-4" style="width: 15rem;">
+                        <img src="../static/images/a3.jpg" class="card-img-top" th:src="@{images/ganesh.jpeg}" alt="image">
+                        <div class="card-body text-center">
+                            <!-- <h5 class="card-title">Patachitra</h5> -->
+                            <p class="card-text">Stone Work</p>
+                            <a class="btn btn-warning" th:href="@{/products}">View</a>
+                        </div>
+                    </div>
+                    <div class="card m-2 p-4" style="width: 15rem;">
+                        <img src="../static/images/a3.jpg" class="card-img-top" th:src="@{images/krishna.jpeg}" alt="image">
+                        <div class="card-body text-center">
+                            <!-- <h5 class="card-title">Patachitra</h5> -->
+                            <p class="card-text">Cotton Work</p>
+                            <a class="btn btn-warning" th:href="@{/products}">View</a>
+                        </div>
+                    </div>
+                    <div class="card m-2 p-4" style="width: 15rem;">
+                        <img src="../static/images/a3.jpg" class="card-img-top" th:src="@{images/kaliya.jpeg}" alt="image">
+                        <div class="card-body text-center">
+                            <!-- <h5 class="card-title">Patachitra</h5> -->
+                            <p class="card-text">Wood Work</p>
+                            <a class="btn btn-warning" th:href="@{/products}">View</a>
+                        </div>
+                    </div>
+                    <div class="card m-2 p-4" style="width: 15rem;">
+                        <img src="../static/images/a3.jpg" class="card-img-top" th:src="@{images/a3.jpg}" alt="image">
+                        <div class="card-body text-center">
+                            <!-- <h5 class="card-title">Patachitra</h5> -->
+                            <p class="card-text">Handcraft</p>
+                            <a href="#" class="btn btn-warning">View</a>
+                        </div>
+                    </div>
+                    <div class="card m-2 p-4" style="width: 15rem;">
+                        <img src="../static/images/a3.jpg" class="card-img-top" th:src="@{images/a3.jpg}" alt="image">
+                        <div class="card-body text-center">
+                            <!-- <h5 class="card-title">Patachitra</h5> -->
+                            <p class="card-text">Handcraft</p>
+                            <a href="#" class="btn btn-warning">View</a>
+                        </div>
+                    </div>
+                    <div class="card m-2 p-4" style="width: 15rem;">
+                        <img src="../static/images/a3.jpg" class="card-img-top" th:src="@{images/a3.jpg}" alt="image">
+                        <div class="card-body text-center">
+                            <!-- <h5 class="card-title">Patachitra</h5> -->
+                            <p class="card-text">Handcraft</p>
+                            <a href="#" class="btn btn-warning">View</a>
+                        </div>
+                    </div>
+                    <div class="card m-2 p-4" style="width: 15rem;">
+                        <img src="../static/images/a3.jpg" class="card-img-top" th:src="@{images/a3.jpg}" alt="image">
+                        <div class="card-body text-center">
+                            <!-- <h5 class="card-title">Patachitra</h5> -->
+                            <p class="card-text">Handcraft</p>
+                            <a href="#" class="btn btn-warning">View</a>
+                        </div>
+                    </div>
+                    <div class="card m-2 p-4" style="width: 15rem;">
+                        <img src="../static/images/a3.jpg" class="card-img-top" th:src="@{images/a3.jpg}" alt="image">
+                        <div class="card-body text-center">
+                            <!-- <h5 class="card-title">Patachitra</h5> -->
+                            <p class="card-text">Handcraft</p>
+                            <a href="#" class="btn btn-warning">View</a>
+                        </div>
+                    </div>
+                    <div class="card m-2 p-4" style="width: 15rem;">
+                        <img src="../static/images/a3.jpg" class="card-img-top" th:src="@{images/a3.jpg}" alt="image">
+                        <div class="card-body text-center">
+                            <!-- <h5 class="card-title">Patachitra</h5> -->
+                            <p class="card-text">Handcraft</p>
+                            <a href="#" class="btn btn-warning">View</a>
+                        </div>
+                    </div>
+                    <div class="card m-2 p-4" style="width: 15rem;">
+                        <img src="../static/images/a3.jpg" class="card-img-top" th:src="@{images/a3.jpg}" alt="image">
+                        <div class="card-body text-center">
+                            <!-- <h5 class="card-title">Patachitra</h5> -->
+                            <p class="card-text">Handcraft</p>
+                            <a href="#" class="btn btn-warning">View</a>
+                        </div>
+                    </div>
+                    <div class="card m-2 p-4" style="width: 15rem;">
+                        <img src="../static/images/a3.jpg" class="card-img-top" th:src="@{images/a3.jpg}" alt="image">
+                        <div class="card-body text-center">
+                            <!-- <h5 class="card-title">Patachitra</h5> -->
+                            <p class="card-text">Handcraft</p>
+                            <a href="#" class="btn btn-warning">View</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Products items End -->
+        </div>
+
+        <div class=" container-fluid m-0 pt-4" th:fragment="footer">
             <footer class="pt-4" style="background-color:#1F4E5F;">
                 <div class="row">
                     <div class="col-3 col-md">

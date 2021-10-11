@@ -1,3 +1,5 @@
+UPDATE `pattachitra`.`pe_order` SET `status` = 'NEW' WHERE (`od_id` = '1');
+
 SET FOREIGN_KEY_CHECKS = 0;
 drop table if exists account;
 drop table if exists account_roles;

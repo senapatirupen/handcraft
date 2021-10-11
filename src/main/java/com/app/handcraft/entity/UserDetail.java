@@ -29,8 +29,8 @@ public class UserDetail extends AuditLog {
     private String firstName;
     @Column(name="LAST_NAME", unique = false, nullable = true)
     private String lastName;
-    @Column(name = "USER_NAME", unique = false, nullable = false)
-    private String userName;
+    @Column(name = "USERNAME", unique = false, nullable = false)
+    private String username;
     @Column(name = "EMAIL_ID", unique = false, nullable = false)
     private String emailId;
     @Column(name = "PHONE_NUMBER", unique = false, nullable = false)

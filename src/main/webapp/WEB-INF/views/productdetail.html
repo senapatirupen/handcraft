@@ -1,65 +1,58 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:include="fragments/head :: head">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/productdetail.css}">
+<head th:include="template/craftlayout :: head">
 </head>
 
 <body>
 <div class="container-fluid m-0 p-0">
+
     <!-- header -->
     <div class="p-2">
-        <!--            <div th:replace="fragments/header :: header">Header</div>-->
-        <div th:replace="${#strings.isEmpty(userDetail.emailId)} ?
-        ~{fragments/header.html :: header} :
-        ~{fragments/headerwithuser.html :: headerwithuser}">
-        </div>
+        <div th:replace="template/craftlayout :: header">Header</div>
         <!-- navbar start -->
-        <div th:replace="fragments/navbar :: navbar">Nav Bar</div>
+        <div th:replace="template/craftlayout :: navbar">Nav Bar</div>
         <!-- navbar end -->
     </div>
     <!-- header end -->
+
     <div>
         <h3 class="text-center">Product Details</h3>
     </div>
     <div>
         <!-- Products items start -->
         <div class="row m-4">
-            <form action="#" th:action="@{/addToCart}" th:object="${userDetail}" method="post">
             <div class="col-4 card">
-                ​<img src="../static/images/productdetail.JPG" th:src="@{images/productdetail.JPG}" class="img-fluid"
-                      alt="Product">
-                <input type="hidden" class="form-control" id="name" th:field="*{name}">
-                <div class="card-body text-center">
-<!--                    <a th:href="@{/cart}" class="btn btn-warning btn-sm">Add To Cart</a>-->
-<!--                    <a th:href="@{/buynow}" class="btn btn-primary btn-sm">Buy Now</a>-->
-                    <button type="submit" class="btn btn-primary">Add To Cart</button>
-                </div>
+                <form action="#" th:action="@{/addtocart}" th:object="${product}" method="post">
+                        <img src="../static/images/ganesh.jpg" th:src="@{images/ganesh.jpeg}" alt="image" class="img-fluid">
+                        <input type="hidden" class="form-control" id="name" th:field="*{name}" th:value="${product.name}">
+                        <input type="hidden" class="form-control" id="model" th:field="*{model}" th:value="${product.model}">
+                        <div class="card-body text-center">
+                            <!--                    <a th:href="@{/cart}" class="btn btn-warning btn-sm">Add To Cart</a>-->
+                            <!--                    <a th:href="@{/buynow}" class="btn btn-primary btn-sm">Buy Now</a>-->
+                            <button type="submit" class="btn btn-primary">Add To Cart</button>
+                        </div>
+                </form>
             </div>
-            </form>
             <div class="col-8 p-2 border">
                 <div class="row p-4">
                     <table class="table table-borderless">
                         <tbody>
                         <tr>
                             <th>Name</th>
-                            <td>Product One</td>
+                            <td th:text="${product.name}">Product One</td>
                         </tr>
                         <tr>
                             <th>Model</th>
-                            <td>Product Model One</td>
+                            <td th:text="${product.model}">Product Model One</td>
                         </tr>
                         <tr>
                             <th>MRP</th>
-                            <td>100</td>
-                        </tr>
-                        <tr>
-                            <th>Offer</th>
-                            <td>20%</td>
+                            <td>Handcraft Product Price May Vary.</td>
                         </tr>
                         <tr>
                             <th>Price</th>
-                            <td>80</td>
+                            <td>We Will Call You Once Order Is Placed.</td>
                         </tr>
                         </tbody>
                     </table>
@@ -82,29 +75,25 @@
     </div>
     <div class=" mt-2 border">
         <div class="row p-4">
-            <div class="col-4">
-                <h5 class="text-center"><b>Duration</b></h5>
+            <div class="col-3">
+                <h5 class="text-center"><b>Dimensions</b></h5>
                 <table class="table table-borderless">
                     <tbody>
                     <tr>
-                        <th>Name</th>
-                        <td>Product One</td>
+                        <th>Width</th>
+                        <td>2 inch</td>
                     </tr>
                     <tr>
-                        <th>Model</th>
-                        <td>Product Model One</td>
+                        <th>Height</th>
+                        <td>7 inch</td>
                     </tr>
                     <tr>
-                        <th>MRP</th>
-                        <td>100</td>
+                        <th>Weight</th>
+                        <td>1.2 kg</td>
                     </tr>
                     <tr>
-                        <th>Offer</th>
-                        <td>20%</td>
-                    </tr>
-                    <tr>
-                        <th>Price</th>
-                        <td>80</td>
+                        <th>Dimensions</th>
+                        <td>6 * 4(inch)</td>
                     </tr>
                     </tbody>
                 </table>
@@ -119,19 +108,27 @@
                     </tr>
                     <tr>
                         <th>Model</th>
-                        <td>Product Model One</td>
+                        <td>b-P1079</td>
                     </tr>
                     <tr>
-                        <th>MRP</th>
-                        <td>100</td>
+                        <th>Frame Included</th>
+                        <td>Yes</td>
                     </tr>
                     <tr>
-                        <th>Offer</th>
-                        <td>20%</td>
+                        <th>Wall Mount</th>
+                        <td>Yes</td>
                     </tr>
                     <tr>
-                        <th>Price</th>
-                        <td>80</td>
+                        <th>Quantity</th>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <th>Material</th>
+                        <td>Cane Stick</td>
+                    </tr>
+                    <tr>
+                        <th>Origin</th>
+                        <td>India, Orissa, Raghurajpur</td>
                     </tr>
                     </tbody>
                 </table>
@@ -141,36 +138,19 @@
                 <table class="table table-borderless">
                     <tbody>
                     <tr>
-                        <th>Name</th>
-                        <td>Product One</td>
-                    </tr>
-                    <tr>
-                        <th>Model</th>
-                        <td>Product Model One</td>
-                    </tr>
-                    <tr>
-                        <th>MRP</th>
-                        <td>100</td>
-                    </tr>
-                    <tr>
-                        <th>Offer</th>
-                        <td>20%</td>
-                    </tr>
-                    <tr>
-                        <th>Price</th>
-                        <td>80</td>
+                        <th>Detail</th>
+                        <td>Material: Talapatra, Cane Stick Frame Size : 6x6 (inch) Talapatra Painting Size: 3.5x3.5 (inch) Weight: 155 (g) ?Unique art made up on delicate Talapatra paintings are made by fine line drawings etched with a steel stylus on rectangular strips of palm leaves that are delicately strung together. ... The great epics Ramayana and Mahabharata are favourite subjects of illustration in many art forms, as they are with palm leaf paintings.</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-    <!-- Products items End-->
-    <!-- footer start -->
-    <div th:replace="fragments/footer :: footer">footer</div>
-    <!-- footer end -->
 </div>
-<!-- Script -->
+<!-- Products items End-->
+<!-- footer start -->
+<div th:replace="template/craftlayout :: footer">footer</div>
+<!-- footer end -->
 <script type="text/javascript" th:src="@{webjars/bootstrap/5.0.1/js/bootstrap.bundle.min.js}"></script>
 <script type="text/javascript" th:src="@{webjars/font-awesome/5.15.3/js/all.min.js}"></script>
 </body>

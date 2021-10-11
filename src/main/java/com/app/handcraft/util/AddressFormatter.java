@@ -10,7 +10,8 @@ public class AddressFormatter {
 
     public static String addressFormat(Address address) {
         String addressAfterFormat =
-                Stream.of(address.getAddressLineOne(), address.getAddressLineTwo(),
+                Stream.of("ID:"+address.getAdId(), "TYPE:"+address.getType().toUpperCase(), address.getAddressLineOne(), address.getAddressLineTwo(),
+                        address.getState(), address.getCountry(), address.getLandmark(),
                         address.getZipcode()).filter(StringUtils::isNotBlank)
                         .collect(Collectors.joining(", "));
         return addressAfterFormat;

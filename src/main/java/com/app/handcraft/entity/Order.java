@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -34,6 +35,7 @@ public class Order extends AuditLog {
     @Column(name="END_DATE", unique = false, nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "EXPECTED_DATE", unique = false, nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
     private Date expectedDate;

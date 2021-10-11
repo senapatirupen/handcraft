@@ -14,7 +14,7 @@ import java.util.Objects;
 @Component
 public class DateUtil {
 
-    public Date stringToDate(String date) {
+    public static Date stringToDate(String date) {
         try{
             Date newDate = !StringUtils.isBlank(date) ? new SimpleDateFormat("yyyy-MM-dd").parse(date) : null;
             return newDate;

@@ -25,14 +25,12 @@ public class Address extends AuditLog {
     private String addressLineOne;
     @Column(name="ADDRESS_LINE_TWO", unique = false, nullable = false)
     private String addressLineTwo;
-    @Column(name="LANDMARK", unique = false, nullable = false)
+    @Column(name="LANDMARK", unique = false, nullable = true)
     private String landmark;
     @Column(name="COUNTRY", unique = false, nullable = false)
     private String country;
     @Column(name="STATE", unique = false, nullable = false)
     private String state;
-    @Column(name="CITY_VILLAGE", unique = false, nullable = false)
-    private String cityVillage;
     @Column(name="ZIPCODE", unique = false, nullable = false)
     private String zipcode;
     @Column(name="TYPE", unique = false, nullable = false)

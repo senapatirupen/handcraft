@@ -10,7 +10,6 @@ public class ReturnAddressTransformer {
         toReturnAddress.setLandmark(fromReturnAddress.getLandmark());
         toReturnAddress.setCountry(fromReturnAddress.getCountry());
         toReturnAddress.setState(fromReturnAddress.getState());
-        toReturnAddress.setCityVillage(fromReturnAddress.getCityVillage());
         toReturnAddress.setZipcode(fromReturnAddress.getZipcode());
         toReturnAddress.setType(fromReturnAddress.getType());
         return toReturnAddress;
@@ -25,7 +24,6 @@ public class ReturnAddressTransformer {
         toReturnAddress.setLandmark(fromReturnAddress.getLandmark());
         toReturnAddress.setCountry(fromReturnAddress.getCountry());
         toReturnAddress.setState(fromReturnAddress.getState());
-        toReturnAddress.setCityVillage(fromReturnAddress.getCityVillage());
         toReturnAddress.setZipcode(fromReturnAddress.getZipcode());
         toReturnAddress.setType(fromReturnAddress.getType());
         return toReturnAddress;

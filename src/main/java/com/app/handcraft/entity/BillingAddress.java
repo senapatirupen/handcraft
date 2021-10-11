@@ -31,8 +31,6 @@ public class BillingAddress extends AuditLog {
     private String country;
     @Column(name="STATE", unique = false, nullable = true)
     private String state;
-    @Column(name="CITY_VILLAGE", unique = false, nullable = true)
-    private String cityVillage;
     @Column(name="ZIPCODE", unique = false, nullable = true)
     private String zipcode;
     @Column(name="TYPE", unique = false, nullable = true)

@@ -1,6 +1,7 @@
 package com.app.handcraft.entity;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,6 +13,7 @@ public class AuditLog implements Serializable {
     private static final long serialVersionUID = 1L;
     @Column(name = "CREATED_BY", nullable = false, unique = false)
     protected String createdBy;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "CREATED_DATE", nullable = false, unique = false)
     @Temporal(TemporalType.TIMESTAMP)
     protected Date createdDate;

@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="WISH_LIST")
@@ -24,5 +26,5 @@ public class WishList extends AuditLog {
     private String wishListStatus;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="WI_ID")
-    private Collection<Product> products;
+    private Set<Product> products = new HashSet<>();
 }

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="template/craftlayout :: head">
+</head>
+
+<body>
+<div class="container-fluid m-0 p-0">
+<!-- header -->
+<div class="p-2">
+    <div th:replace="template/craftlayout :: header">Header</div>
+    <!-- navbar start -->
+    <div th:replace="template/craftlayout :: navbar">Nav Bar</div>
+    <!-- navbar end -->
+</div>
+<!-- header end -->
+        <div class="col-12 text-center"><h3>Orders</h3></div>
+        <!-- Products items start -->
+        <div class="row my-2" th:if="${#lists.size(orders) == 0}">
+            <div class="col-5">
+                <h3>Sorry Currently You Do Not Have Any Order</h3>
+            </div>
+        </div>
+        <div class="row m-4" th:if="${#lists.size(orders) > 0}">
+            <div class="col-6 border">
+            </div>
+            <div class="col-4 m-4 border">
+                <table class="table table-striped" th:each="order: ${orders}">
+                    <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Products</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td th:text="${order.odId}"></td>
+                        <td th:text="${order.status}"></td>
+                        <td>
+                            <table class="table table-striped" th:each="product: ${order.products}">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Model</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td th:text="${product.name}"></td>
+                                    <td th:text="${product.model}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Products items End -->
+<!-- footer start -->
+<div th:replace="template/craftlayout :: footer">footer</div>
+<!-- footer end -->
+<script type="text/javascript" th:src="@{webjars/bootstrap/5.0.1/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{webjars/font-awesome/5.15.3/js/all.min.js}"></script>
+
+</body>
+
+</html>

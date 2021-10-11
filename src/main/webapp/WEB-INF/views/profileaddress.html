@@ -1,27 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chitra</title>
-    <!-- CSS -->
-    <link rel="stylesheet" th:href="@{webjars/bootstrap/5.0.1/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" th:href="@{webjars/font-awesome/5.15.3/css/fontawesome.min.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+<head th:include="template/craftlayout :: head">
 </head>
 
 <body>
+<!-- header -->
+<div class="p-2">
+    <div th:replace="template/craftlayout :: header">Header</div>
+    <!-- navbar start -->
+    <div th:replace="template/craftlayout :: navbar">Nav Bar</div>
+    <!-- navbar end -->
+</div>
+<!-- header end -->
     <div class="text-center"><h3>Profile Address</h3></div>
     <div class="container">
         <!-- Products items start -->
         <div class="row my-2">
             <div class="col-3">
                 <ul class="list-group">
-                    <li class="list-group-item" aria-current="true">Detail</li>
-                    <li class="list-group-item active bg">Addresses</li>
+                    <li class="list-group-item">Detail</li>
+                    <li class="list-group-item active">Addresses</li>
                     <li class="list-group-item">Order History</li>
                     <li class="list-group-item">Reset Password</li>
                     <li class="list-group-item">Payment</li>
@@ -44,7 +43,7 @@
                                     <a class="btn btn-warning" th:href="@{/profileaddressedit(id=${address.adId})}">Edit</a>
                                 </div>
                                 <div class="col-2 text-end">
-                                    <button type="button" class="btn btn-warning">Remove</button>
+                                    <a class="btn btn-warning" th:href="@{/profileaddressremove(id=${address.adId})}">Remove</a>
                                 </div>
                             </div>
                         </div>
@@ -108,14 +107,19 @@
                 </div>
                 <div class="row m-2">
                     <div class="col-4">
-                        <button type="button" href="#" class="btn btn-warning">Add</button>
+                        <a class="btn btn-warning" th:href="@{/profileaddressadd}">Add</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <!-- Products items End -->
-    <script type="text/javascript" th:src="@{webjars/bootstrap/5.0.1/js/bootstrap.bundle.min.js}"></script>
+<!-- footer start -->
+<div th:replace="template/craftlayout :: footer">footer</div>
+<!-- footer end -->
+<script type="text/javascript" th:src="@{webjars/bootstrap/5.0.1/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{webjars/font-awesome/5.15.3/js/all.min.js}"></script>
+
 
 </body>
 

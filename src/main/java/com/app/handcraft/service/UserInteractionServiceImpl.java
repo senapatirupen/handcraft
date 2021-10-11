@@ -7,11 +7,11 @@ import com.app.handcraft.repository.AddressRepository;
 import com.app.handcraft.repository.PersonRepository;
 import com.app.handcraft.repository.UserDetailRepository;
 import com.app.handcraft.util.DateUtil;
-import com.apress.prospringmvc.bookstore.domain.Account;
 import com.apress.prospringmvc.bookstore.service.AuthenticationException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -56,21 +56,31 @@ public class UserInteractionServiceImpl implements UserInteractionService {
     }
 
     @Override
-    public Person findPersonByUserName(String userName) {
-        Person person = personRepository.findByUserName(userName);
+    public Person findPersonByUserName(String username) {
+        Person person = personRepository.findByUsername(username);
         return person;
     }
 
     @Override
-    public Collection<Address> findPersonAddressesByUserName(String userName) {
-        Person person = personRepository.findByUserName(userName);
+    public Collection<Address> findPersonAddressesByUserName(String username) {
+        Person person = personRepository.findByUsername(username);
         return person.getAddresses();
     }
 
     @Override
-    public UserDetail findUserDetailByUserName(String userName) {
-        UserDetail userDetail = userDetailRepository.findByUserName(userName);
+    public UserDetail findUserDetailByUserName(String username) {
+        UserDetail userDetail = userDetailRepository.findByUsername(username);
         return userDetail;
+    }
+
+    @Override
+    public UserDetail updateUserDetail(UserDetail userDetail) {
+        UserDetail userDetailDb = userDetailRepository.findByUsername(userDetail.getUsername());
+        userDetailDb.setEmailId(userDetail.getEmailId());
+        userDetailDb.setUsername(userDetail.getEmailId());
+        userDetailDb.setPhoneNumber(userDetail.getPhoneNumber());
+        userDetailRepository.save(userDetailDb);
+        return userDetailDb;
     }
 
     @Override
@@ -84,8 +94,8 @@ public class UserInteractionServiceImpl implements UserInteractionService {
         return userDetail;
     }
 
-    public Optional<UserDetail> isPresentUserDetailByUserName(String userName) {
-        userDetailOptional = Optional.of(userDetailRepository.findByUserName(userName));
+    public Optional<UserDetail> isPresentUserDetailByUserName(String username) {
+        userDetailOptional = Optional.of(userDetailRepository.findByUsername(username));
         return userDetailOptional;
     }
 
@@ -96,12 +106,12 @@ public class UserInteractionServiceImpl implements UserInteractionService {
 
     public UserDetail findByUserNameOrEmailId(String userNameEmailId) {
         String emailId = "";
-        String userName = "";
+        String username = "";
         if (userNameEmailId.contains(".com"))
             emailId = userNameEmailId;
         else
-            userName = userNameEmailId;
-        UserDetail userDetail = userDetailRepository.validateUserNameOrEmailId(userName, emailId);
+            username = userNameEmailId;
+        UserDetail userDetail = userDetailRepository.validateUserNameOrEmailId(username, emailId);
         return userDetail;
     }
 
@@ -117,27 +127,27 @@ public class UserInteractionServiceImpl implements UserInteractionService {
     }
 
     @Override
-    public Address createAddress(String userName, Address address) {
-        Person person = findPersonByUserName(userName);
-        Address newAddress = addressRepository.save(address);
-        if(CollectionUtils.isEmpty(person.getAddresses())){
-            Set<Address> addressSet = new HashSet<Address>();
-            addressSet.add(newAddress);
-            person.setAddresses(addressSet);
-        }
-        person.getAddresses().add(newAddress);
+    public Address createAddress(String username, Address address) {
+        Person person = findPersonByUserName(username);
+        addressRepository.save(address);
+        person.getAddresses().add(address);
         personRepository.save(person);
         log.info("Existing Person >>>>> {}", person.toString());
-        log.info("New Address >>>>> {}", newAddress.toString());
-        return newAddress;
+        log.info("New Address >>>>> {}", address.toString());
+        return address;
     }
 
     @Override
-    public Address updateAddress(String userName, Address address) {
+    public Address findAddress(String username, String id) {
+        Address existAddress = addressRepository.findById(Long.parseLong(id)).get();
+        return existAddress;
+    }
+
+    @Override
+    public Address updateAddress(String username, Address address) {
         Address existAddress = addressRepository.findById(address.getAdId()).get();
         existAddress.setAddressLineOne(address.getAddressLineOne());
         existAddress.setAddressLineTwo(address.getAddressLineTwo());
-        existAddress.setCityVillage(address.getCityVillage());
         existAddress.setCountry(address.getCountry());
         existAddress.setLandmark(address.getLandmark());
         existAddress.setState(address.getState());
@@ -149,7 +159,7 @@ public class UserInteractionServiceImpl implements UserInteractionService {
     }
 
     @Override
-    public Boolean removeAddress(String userName, Long adId) {
+    public Boolean removeAddress(String username, Long adId) {
         Address existAddress = addressRepository.findById(adId).get();
         addressRepository.deleteById(adId);
         log.info("Removed Address >>>>> {}", existAddress.toString());
@@ -157,8 +167,8 @@ public class UserInteractionServiceImpl implements UserInteractionService {
     }
 
     @Override
-    public Collection<Address> allAddresses(String userName) {
-        Collection<Address> addresses = personRepository.findByUserName(userName).getAddresses();
+    public Set<Address> allAddresses(String username) {
+        Set<Address> addresses = personRepository.findByUsername(username).getAddresses();
         return addresses;
     }
 
@@ -190,14 +200,16 @@ public class UserInteractionServiceImpl implements UserInteractionService {
         Boolean valid = validateUserDetail(userDetail).containsKey(true);
         UserDetail newUserDetail = null;
         if (!valid) {
-            userDetail.setCreatedBy(userDetail.getUserName());
+            userDetail.setCreatedBy(userDetail.getUsername());
             userDetail.setCreatedDate(new Date());
-            userDetail.setLastModifiedBy(userDetail.getUserName());
+            userDetail.setLastModifiedBy(userDetail.getUsername());
             userDetail.setLastModifiedDate(new Date());
             userDetail.setIsActive(true);
             userDetail.setStatus("Active");
 //            userDetail.setDob(dateUtil.dateToDate(userDetail.getDob()));
-            userDetail.setUserName(userDetail.getEmailId());
+            userDetail.setUsername(userDetail.getEmailId());
+            userDetail.setPassword(new BCryptPasswordEncoder().encode(userDetail.getPassword()));
+            userDetail.setRePassword(new BCryptPasswordEncoder().encode(userDetail.getRePassword()));
             newUserDetail = userDetailRepository.save(userDetail);
             Person person = new Person();
             person.setUserDetail(newUserDetail);
@@ -235,16 +247,16 @@ public class UserInteractionServiceImpl implements UserInteractionService {
     @Override
     @Transactional(readOnly = false)
     public UserDetail save(UserDetail account) {
-        UserDetail acc = getAccount(account.getUserName());
+        UserDetail acc = getAccount(account.getUsername());
         if(acc == null) {
-            account.setPassword(sha256Hex(account.getPassword() + "{" + account.getUserName() + "}"));
+            account.setPassword(sha256Hex(account.getPassword() + "{" + account.getUsername() + "}"));
         }
         return userDetailRepository.save(account);
     }
 
     @Override
     public UserDetail login(String username, String password) throws AuthenticationException {
-        var account = userDetailRepository.findByUserName(username);
+        var account = userDetailRepository.findByUsername(username);
         if (account != null) {
             var pwd = sha256Hex(password + "{" + username + "}");
             if (!account.getPassword().equalsIgnoreCase(pwd)) {
@@ -259,7 +271,7 @@ public class UserInteractionServiceImpl implements UserInteractionService {
 
     @Override
     public UserDetail getAccount(String username) {
-        return userDetailRepository.findByUserName(username);
+        return userDetailRepository.findByUsername(username);
     }
 
     private String sha256Hex(String text) {

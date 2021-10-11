@@ -1,5 +1,7 @@
 package com.apress.prospringmvc.bookstore.web.config.sec;
 
+import com.app.handcraft.entity.UserDetail;
+import com.app.handcraft.service.UserInteractionService;
 import com.apress.prospringmvc.bookstore.domain.Account;
 import com.apress.prospringmvc.bookstore.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,31 +20,34 @@ import java.util.List;
 
 public class BookstoreAuthenticationProvider implements AuthenticationProvider {
 
-  private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-  @Autowired
-	private AccountService authenticationService;
+    @Autowired
+    private AccountService authenticationService;
+    @Autowired
+    private UserInteractionService userInteractionService;
 
-	@Override
-	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-		String username = authentication.getName();
-		String password = authentication.getCredentials().toString();
+    @Override
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        String username = authentication.getName();
+        String password = authentication.getCredentials().toString();
 
-		Account account = authenticationService.getAccount(username);
-		if(account == null) {
-			throw new BadCredentialsException("Authentication failed <username> for " + username);
-		}
-		if(!passwordEncoder.matches(password, account.getPassword())) {
-			throw new BadCredentialsException("Authentication failed <password> for " + username);
-		}
-		List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-		account.getRoles().forEach(role -> grantedAuthorities.add(new SimpleGrantedAuthority(role.getRole())));
-		return new
-				UsernamePasswordAuthenticationToken(username, password, grantedAuthorities);
-	}
+//        Account account = authenticationService.getAccount(username);
+        UserDetail account = userInteractionService.getAccount(username);
+        if (account == null) {
+            throw new BadCredentialsException("Authentication failed <username> for " + username);
+        }
+        if (!passwordEncoder.matches(password, account.getPassword())) {
+            throw new BadCredentialsException("Authentication failed <password> for " + username);
+        }
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+        account.getRoles().forEach(role -> grantedAuthorities.add(new SimpleGrantedAuthority(role.getRole())));
+        return new
+                UsernamePasswordAuthenticationToken(username, password, grantedAuthorities);
+    }
 
-	@Override
-	public boolean supports(Class<?> authentication) {
-		return authentication.equals(UsernamePasswordAuthenticationToken.class);
-	}
+    @Override
+    public boolean supports(Class<?> authentication) {
+        return authentication.equals(UsernamePasswordAuthenticationToken.class);
+    }
 }

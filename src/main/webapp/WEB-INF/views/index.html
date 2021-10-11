@@ -1,24 +1,40 @@
-<!--
-Created by IntelliJ IDEA.
-User: iuliana cosmina
-Date: 2020-05-24
-Time: 11:47
--->
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{template/layout :: head('Welcome')}"></head>
+<head th:include="template/craftlayout :: head">
+</head>
 
 <body>
-<div id="wrap">
-    <div id="header" th:replace="~{template/layout :: header}" ></div>
-    <div class="center_content">
-        <div class="left_content" id="left_content" th:replace="~{template/layout :: left_content}" ></div>
-        <div class="right_content" id="right_content" th:replace="~{template/layout :: right_content}" ></div>
-        <div class="clear"></div>
-    </div> <!-- end of center_content -->
+    <div class="container-fluid m-0 p-0">
+        <!-- header -->
+        <div class="p-2">
+            <div th:replace="template/craftlayout :: header">Header</div>
+            <!--<div th:replace="${#strings.isEmpty(userDetail.emailId)} ?
+                ~{fragments/craftlayout :: header} :
+                ~{fragments/craftlayout :: headerwithuser}">
+            </div>-->
 
-    <div class="footer" id="footer" th:replace="~{template/layout :: footer}" ></div>
-</div>
+            <!-- navbar start -->
+            <div th:replace="template/craftlayout :: navbar">Nav Bar</div>
+            <!-- navbar end -->
+        </div>
+        <!-- header end -->
+        <!-- ImageSlide start -->
+        <div>
+            <div th:replace="template/craftlayout :: carousel">Carousel</div>
+        </div>
+        <!-- ImageSlide end -->
+        <!-- Products items start -->
+        <div th:replace="template/craftlayout :: products">Products content</div>
+        <!-- Products items End -->
+    </div>
+    <!-- footer start -->
+    <div th:replace="template/craftlayout :: footer">footer</div>
+    <!-- footer end -->
+
+    <!-- Script -->
+    <script type="text/javascript" th:src="@{webjars/bootstrap/5.0.1/js/bootstrap.bundle.min.js}"></script>
+    <script type="text/javascript" th:src="@{webjars/font-awesome/5.15.3/js/all.min.js}"></script>
 </body>
+
 </html>

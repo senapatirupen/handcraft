@@ -45,7 +45,7 @@ public class AuthenticationDataPopulator {
 //		UserDetail userDetail = UserDetail.builder()
 //				.name("senapati")
 //				.phoneNumber("81477")
-//				.userName("senapati@gmail.com")
+//				.username("senapati@gmail.com")
 //				.emailId("senapatirupen@gmail.com")
 //				.password(passwordEncoder.encode("123"))
 //				.rePassword(passwordEncoder.encode("123"))

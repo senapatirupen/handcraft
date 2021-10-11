@@ -10,7 +10,6 @@ public class AddressTransformer {
         toAddress.setLandmark(fromAddress.getLandmark());
         toAddress.setCountry(fromAddress.getCountry());
         toAddress.setState(fromAddress.getState());
-        toAddress.setCityVillage(fromAddress.getCityVillage());
         toAddress.setZipcode(fromAddress.getZipcode());
         toAddress.setType(fromAddress.getType());
         return toAddress;
@@ -25,7 +24,6 @@ public class AddressTransformer {
         toAddress.setLandmark(fromAddress.getLandmark());
         toAddress.setCountry(fromAddress.getCountry());
         toAddress.setState(fromAddress.getState());
-        toAddress.setCityVillage(fromAddress.getCityVillage());
         toAddress.setZipcode(fromAddress.getZipcode());
         toAddress.setType(fromAddress.getType());
         return toAddress;

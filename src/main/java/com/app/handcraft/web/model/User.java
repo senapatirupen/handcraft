@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class User extends AuditLog {
     private static final long serialVersionUID=1L;
     private String id;
-    private String userName;
+    private String username;
     private String phoneNumber;
     private String emailId;
     private String dob;

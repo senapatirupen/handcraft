@@ -29,6 +29,8 @@ public class AdminProductSpecification extends AuditLog {
     @Lob
     private byte[] info;
 
+
+
     public enum Title {
         InTheBox("In The Box"),//iPhone, EarPods with Lightning Connector, Lightning to USB Cable, USB Power Adapter, Documentation
         ModelNumber("Model Number"),//MX9R2HN/A

@@ -2,7 +2,9 @@ package com.app.handcraft.service;
 
 import com.app.handcraft.entity.*;
 import com.app.handcraft.repository.*;
+import com.app.handcraft.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -40,8 +42,8 @@ public class OrderManagementServiceImpl implements OrderManagementService {
     PaymentRepository paymentRepository;
 
     @Override
-    public Cart createCartByUserName(String userName, Cart cart) {
-        Person person = personRepository.findByUserName(userName);
+    public Cart createCartByUserName(String username, Cart cart) {
+        Person person = personRepository.findByUsername(username);
         cart.setPeId(person.getPeId());
         Cart newCart = cartRepository.save(cart);
         person.setCart(newCart);
@@ -52,8 +54,8 @@ public class OrderManagementServiceImpl implements OrderManagementService {
     }
 
     @Override
-    public Cart getCartByUserName(String userName) {
-        Cart cart = personRepository.findCartByUserName(userName);
+    public Cart getCartByUserName(String username) {
+        Cart cart = personRepository.findCartByUsername(username);
         log.info("New Cart >>>>> {}", cart.toString());
         return cart;
     }
@@ -63,6 +65,38 @@ public class OrderManagementServiceImpl implements OrderManagementService {
         Product newProduct = productRepository.save(product);
         log.info("New Product >>>>> {}", newProduct.toString());
         return newProduct;
+    }
+
+    @Override
+    public void productSave() {
+        Product product = Product.builder()
+                .name("ball")
+                .model("balls")
+                .productStatus("good")
+                .isStockAvailable(true)
+                .build();
+        defaultAuditLog(product);
+        productRepository.save(product);
+    }
+
+    private Product defaultAuditLog(Product product) {
+        product.setCreatedBy("system");
+        product.setCreatedDate(new Date());
+        product.setLastModifiedBy("system");
+        product.setLastModifiedDate(new Date());
+        product.setIsActive(true);
+        product.setStatus("good");
+        return product;
+    }
+
+    private Cart defaultAuditLog(Cart obj) {
+        obj.setCreatedBy("system");
+        obj.setCreatedDate(new Date());
+        obj.setLastModifiedBy("system");
+        obj.setLastModifiedDate(new Date());
+        obj.setIsActive(true);
+        obj.setStatus("good");
+        return obj;
     }
 
     @Override
@@ -79,17 +113,24 @@ public class OrderManagementServiceImpl implements OrderManagementService {
     }
 
     @Override
-    public Cart addProductToCartWithProductByUserName(String userName, Product product) {
-        Cart cart = personRepository.findCartByUserName(userName);
+    public Cart addProductToCartWithProductByUserName(String username, Product product) {
+        Cart cart = personRepository.findCartByUsername(username);
         setProductForCart(cart, product);
         cartRepository.save(cart);
         return cart;
     }
 
     @Override
-    public Cart addProductToCartByNameForUserName(String userName, String productName) {
-        Person person = personRepository.findByUserName(userName);
+    public Cart addProductToCartByNameForUserName(String username, String productName) {
+        Person person = personRepository.findByUsername(username);
         Cart cart = person.getCart();
+        if (Objects.isNull(cart)) {
+            cart = Cart.builder().cartStatus("OPEN").peId(person.getPeId()).build();
+            defaultAuditLog(cart);
+            cartRepository.save(cart);
+            person.setCart(cart);
+            personRepository.save(person);
+        }
         Product product = productRepository.findByName(productName);
         setProductForCart(cart, product);
         cartRepository.save(cart);
@@ -97,8 +138,8 @@ public class OrderManagementServiceImpl implements OrderManagementService {
     }
 
     @Override
-    public Cart removeProductFromCartByNameForUserName(String userName, String productName, Long cartId) {
-        Person person = personRepository.findByUserName(userName);
+    public Cart removeProductFromCartByNameForUserName(String username, String productName, Long cartId) {
+        Person person = personRepository.findByUsername(username);
         Cart cart = person.getCart();
 
 //        Product product = productRepository.findByName(productName);
@@ -107,7 +148,7 @@ public class OrderManagementServiceImpl implements OrderManagementService {
 //        productRepository.save(product);
         Product product = cart.getProducts().stream().filter(p -> productName.equalsIgnoreCase(p.getName())).findAny().get();
         cart.getProducts().remove(product);
-//        Cart cart = personRepository.findCartByUserName(userName);
+//        Cart cart = personRepository.findCartByUserName(username);
 //        cartRepository.findProduct
 //        setProductForCart(cart, product);
         cartRepository.save(cart);
@@ -115,33 +156,79 @@ public class OrderManagementServiceImpl implements OrderManagementService {
     }
 
     @Override
-    public Collection<Order> createOrderByTransferProductFromCartToOrderByUserName(String userName) {
-        Person person = personRepository.findByUserName(userName);
+    public Collection<Order> createOrderByTransferProductFromCartToOrderByUserName(String username) {
+        Person person = personRepository.findByUsername(username);
         Cart cart = person.getCart();
-        Order order = new Order();
-        order.setPeId(person.getPeId());
-        Order newOrder = orderRepository.save(order);
-        Collection<Product> products = cart.getProducts();
-        products.stream().forEach(product -> {
-            product.setCaId(null);
-            product.setOdId(newOrder.getOdId());
-            productRepository.save(product);
-        });
-        order.setProducts(products);
-        cart.setProducts(null);
-        cartRepository.save(cart);
-        setOrderForPerson(person, order);
-        personRepository.save(person);
-        orderRepository.save(order);
-        log.info("New Order >>>>> {}", newOrder.toString());
+        if (!CollectionUtils.isEmpty(cart.getProducts())) {
+            Order order = new Order();
+            order.setPeId(person.getPeId());
+            Order newOrder = orderRepository.save(order);
+            Collection<Product> products = cart.getProducts();
+            products.stream().forEach(product -> {
+                product.setCaId(null);
+                product.setOdId(newOrder.getOdId());
+                productRepository.save(product);
+            });
+            order.setProducts(products);
+            cart.setProducts(null);
+            cartRepository.save(cart);
+            setOrderForPerson(person, order);
+            personRepository.save(person);
+            order.setStatus("NEW");
+            orderRepository.save(order);
+            log.info("New Order >>>>> {}", newOrder.toString());
+        }
         return person.getOrders();
     }
 
     @Override
-    public Collection<Order> removeProductFromOrderByIds(String userName, Long orderId, List<Long> productIds) {
-        Person person = personRepository.findByUserName(userName);
+    public Order createOrderByTransferProductFromCartToOrderByUserName(String username, String status) {
+        Person person = personRepository.findByUsername(username);
+        Cart cart = person.getCart();
+        Order order = null;
+        Optional<Order> existing = orderRepository.findOrderByPersonIdAndStatus(person.getPeId(), status);
+        if (!CollectionUtils.isEmpty(cart.getProducts()) && !existing.isPresent()) {
+            order = new Order();
+            order.setPeId(person.getPeId());
+            Order newOrder = orderRepository.save(order);
+            Collection<Product> products = cart.getProducts();
+            products.stream().forEach(product -> {
+                product.setCaId(null);
+                product.setOdId(newOrder.getOdId());
+                productRepository.save(product);
+            });
+            order.setProducts(products);
+            cart.setProducts(null);
+            cartRepository.save(cart);
+            setOrderForPerson(person, order);
+            personRepository.save(person);
+            order.setStatus("NEW");
+            orderRepository.save(order);
+            log.info("New Order >>>>> {}", newOrder.toString());
+            return order;
+        }
+        return existing.get();
+    }
+
+    @Override
+    public Order getOnlyOneOrderHavingStatusNewByUserName(String username) {
+        Person person = personRepository.findByUsername(username);
+        Optional<Order> order = orderRepository.findOrderByPersonIdAndStatus(person.getPeId(), "NEW");
+        if (order.isPresent())
+            return order.get();
+        return null;
+    }
+
+    @Override
+    public Address findAddressById(Long id) {
+        return addressRepository.findById(id).get();
+    }
+
+    @Override
+    public Collection<Order> removeProductFromOrderByIds(String username, Long orderId, List<Long> productIds) {
+        Person person = personRepository.findByUsername(username);
         Order existOrder = orderRepository.findOrderByPersonId(person.getPeId(), orderId);
-        for(Long productId: productIds){
+        for (Long productId : productIds) {
             Product product = productRepository.findById(productId).get();
             existOrder.getProducts().remove(product);
         }
@@ -152,22 +239,22 @@ public class OrderManagementServiceImpl implements OrderManagementService {
     }
 
     @Override
-    public Collection<Order> viewProductsFromOrder(String userName, Long orderId) {
-        Person person = personRepository.findByUserName(userName);
+    public Collection<Order> viewProductsFromOrder(String username, Long orderId) {
+        Person person = personRepository.findByUsername(username);
         Order existOrder = orderRepository.findOrderByPersonId(person.getPeId(), orderId);
         return person.getOrders();
     }
 
 
     @Override
-    public Order addPaymentToOrder(String userName, Long orderId) {
-        Person person = personRepository.findByUserName(userName);
+    public Order addPaymentToOrder(String username, Long orderId) {
+        Person person = personRepository.findByUsername(username);
         Order order = orderRepository.findById(orderId).get();
         Payment payment = new Payment();
         Float totalAmount = 0f;
         List<Float> sellPrice = order.getProducts().stream().map(product -> product.getSellPrice()).collect(Collectors.toList());
         ListIterator<Float> listIterator = sellPrice.listIterator();
-        while(listIterator.hasNext()) {
+        while (listIterator.hasNext()) {
             totalAmount += listIterator.next();
         }
         payment.setPrice(totalAmount);
@@ -179,8 +266,8 @@ public class OrderManagementServiceImpl implements OrderManagementService {
     }
 
     @Override
-    public Order addBillingAddressToOrder(String userName, Long orderId) {
-        Person person = personRepository.findByUserName(userName);
+    public Order addBillingAddressToOrder(String username, Long orderId) {
+        Person person = personRepository.findByUsername(username);
         Order order = orderRepository.findById(orderId).get();
         Address address = addressRepository.findByType(person.getPeId(), "BILLING");
         BillingAddress billingAddress = new BillingAddress();
@@ -193,17 +280,73 @@ public class OrderManagementServiceImpl implements OrderManagementService {
     }
 
     @Override
-    public Order addShippingAndDeliveryAndDeliveryAddressToOrder(String userName, Long orderId, Long addressId,
+    public Order addBillingAddressToOrder(String username, Address address) {
+        Person person = personRepository.findByUsername(username);
+        Order order = getOnlyOneOrderHavingStatusNewByUserName(username);
+        String status = address.getStatus();
+        BillingAddress billingAddress = null;
+        if (!StringUtils.isBlank(status) && status.length() != 11) {
+            String adId = Arrays.asList(status.split(","))
+                    .stream()
+                    .filter(a -> a.contains("ID:"))
+                    .findFirst()
+                    .get()
+                    .substring(3);
+            Address existing = findAddressById(Long.parseLong(adId));
+            billingAddress = BillingAddress.builder().addressLineOne(existing.getAddressLineOne())
+                    .addressLineTwo(existing.getAddressLineTwo())
+                    .zipcode(existing.getZipcode())
+                    .landmark(existing.getLandmark())
+                    .country(existing.getCountry())
+                    .state(existing.getState())
+                    .type("DELIVERY")
+                    .odId(order.getOdId())
+                    .build();
+            billingAddressRepository.save(billingAddress);
+            order.setBillingAddress(billingAddress);
+        } else if (!StringUtils.isBlank(address.getAddressLineOne()) && !StringUtils.isBlank(address.getAddressLineTwo())) {
+            billingAddress = BillingAddress.builder().addressLineOne(address.getAddressLineOne())
+                    .addressLineTwo(address.getAddressLineTwo())
+                    .zipcode(address.getZipcode())
+                    .landmark(address.getLandmark())
+                    .country(address.getCountry())
+                    .state(address.getState())
+                    .type("DELIVERY")
+                    .odId(order.getOdId())
+                    .build();
+            billingAddressRepository.save(billingAddress);
+            order.setBillingAddress(billingAddress);
+        } else if (status.length() == 11) {
+            Date pickupDate = DateUtil.stringToDate(status.substring(1));
+            order.setExpectedDate(pickupDate);
+        }
+        order.setStatus("SUMMARY");
+        orderRepository.save(order);
+        return order;
+    }
+
+
+    @Override
+    public Collection<Order> findOrdersByUserWithStatusSummary(String username) {
+        Person person = personRepository.findByUsername(username);
+        Collection<Order> orders = orderRepository.findOrdersByPersonIdAndStatus(person.getPeId(), "SUMMARY");
+        if (!CollectionUtils.isEmpty(orders))
+            return orders;
+        else
+            return null;
+    }
+
+    @Override
+    public Order addShippingAndDeliveryAndDeliveryAddressToOrder(String username, Long orderId, Long addressId,
                                                                  DeliveryAddress deliveryAddress) {
-        Person person = personRepository.findByUserName(userName);
+        Person person = personRepository.findByUsername(username);
         Order order = orderRepository.findOrderByPersonId(person.getPeId(), orderId);
         Shipping shipping = new Shipping();
         Delivery delivery = new Delivery();
-        if(!Objects.isNull(addressId)) {
+        if (!Objects.isNull(addressId)) {
             Address address = addressRepository.findById(addressId).get();
             deliveryAddress.setAddressLineOne(address.getAddressLineOne());
             deliveryAddress.setAddressLineTwo(address.getAddressLineTwo());
-            deliveryAddress.setCityVillage(address.getCityVillage());
             deliveryAddress.setCountry(address.getCountry());
             deliveryAddress.setState(address.getState());
             deliveryAddress.setLandmark(address.getLandmark());
@@ -234,18 +377,17 @@ public class OrderManagementServiceImpl implements OrderManagementService {
     }
 
     @Override
-    public Order addDeliveryAddressToDeliveryForShippingOnOrder(String userName, Long orderId, Long addressId,
+    public Order addDeliveryAddressToDeliveryForShippingOnOrder(String username, Long orderId, Long addressId,
                                                                 DeliveryAddress deliveryAddress) {
-        Person person = personRepository.findByUserName(userName);
+        Person person = personRepository.findByUsername(username);
         Order order = orderRepository.findOrderByPersonId(person.getPeId(), orderId);
         Shipping shipping = shippingRepository.findByOdId(orderId);
         Delivery delivery = deliveryRepository.findByShId(shipping.getShId());
         deliveryAddress.setDeId(delivery.getDeId());
-        if(!Objects.isNull(addressId)) {
+        if (!Objects.isNull(addressId)) {
             Address address = addressRepository.findById(addressId).get();
             deliveryAddress.setAddressLineOne(address.getAddressLineOne());
             deliveryAddress.setAddressLineTwo(address.getAddressLineTwo());
-            deliveryAddress.setCityVillage(address.getCityVillage());
             deliveryAddress.setCountry(address.getCountry());
             deliveryAddress.setState(address.getState());
             deliveryAddress.setLandmark(address.getLandmark());
@@ -259,8 +401,8 @@ public class OrderManagementServiceImpl implements OrderManagementService {
     }
 
     @Override
-    public Order addShippingAndDeliveryToOrder(String userName, Long orderId) {
-        Person person = personRepository.findByUserName(userName);
+    public Order addShippingAndDeliveryToOrder(String username, Long orderId) {
+        Person person = personRepository.findByUsername(username);
         Order order = orderRepository.findOrderByPersonId(person.getPeId(), orderId);
         Shipping shipping = new Shipping();
         Delivery delivery = new Delivery();
@@ -284,9 +426,9 @@ public class OrderManagementServiceImpl implements OrderManagementService {
     }
 
     @Override
-    public Order addShippingAddressToShippingForOrder(String userName, Long orderId, Long shippingId,
+    public Order addShippingAddressToShippingForOrder(String username, Long orderId, Long shippingId,
                                                       ShippingAddress shippingAddress) {
-        Person person = personRepository.findByUserName(userName);
+        Person person = personRepository.findByUsername(username);
         Order order = orderRepository.findOrderByPersonId(person.getPeId(), orderId);
         Shipping shipping = shippingRepository.findById(shippingId).get();
         shippingAddress.setShId(shippingId);
@@ -298,8 +440,8 @@ public class OrderManagementServiceImpl implements OrderManagementService {
     }
 
     @Override
-    public Order setDeliverAndShippingAsDoneForOrder(String userName, Long orderId) {
-        Person person = personRepository.findByUserName(userName);
+    public Order setDeliverAndShippingAsDoneForOrder(String username, Long orderId) {
+        Person person = personRepository.findByUsername(username);
         Order order = orderRepository.findOrderByPersonId(person.getPeId(), orderId);
         Shipping shipping = shippingRepository.findByOdId(orderId);
         shipping.setStatus("DONE");
@@ -311,8 +453,8 @@ public class OrderManagementServiceImpl implements OrderManagementService {
     }
 
     @Override
-    public Order setPaymentAsDoneForOrder(String userName, Long orderId) {
-        Person person = personRepository.findByUserName(userName);
+    public Order setPaymentAsDoneForOrder(String username, Long orderId) {
+        Person person = personRepository.findByUsername(username);
         Order order = orderRepository.findOrderByPersonId(person.getPeId(), orderId);
         Payment payment = paymentRepository.findByOdId(orderId);
         payment.setStatus("DONE");
@@ -321,8 +463,8 @@ public class OrderManagementServiceImpl implements OrderManagementService {
     }
 
     @Override
-    public Order updateOrderAsDone(String userName, Long orderId) {
-        Person person = personRepository.findByUserName(userName);
+    public Order updateOrderAsDone(String username, Long orderId) {
+        Person person = personRepository.findByUsername(username);
         Order order = orderRepository.findOrderByPersonId(person.getPeId(), orderId);
         order.setOrderStatus("DONE");
         order.setStatus("INACTIVE");
@@ -331,17 +473,17 @@ public class OrderManagementServiceImpl implements OrderManagementService {
     }
 
     @Override
-    public Collection<Order> viewAllOrders(String userName) {
-        Person person = personRepository.findByUserName(userName);
+    public Collection<Order> viewAllOrders(String username) {
+        Person person = personRepository.findByUsername(username);
         return person.getOrders();
     }
 
     @Override
-    public Order addShippingAndReturnAndReturnAddressToOrder(String userName, Long orderId, Long addressId,
-                                                                 ReturnAddress returnAddress) {
-        Person person = personRepository.findByUserName(userName);
+    public Order addShippingAndReturnAndReturnAddressToOrder(String username, Long orderId, Long addressId,
+                                                             ReturnAddress returnAddress) {
+        Person person = personRepository.findByUsername(username);
         Order order = orderRepository.findOrderByPersonId(person.getPeId(), orderId);
-        if(null != addressId) {
+        if (null != addressId) {
             Address address = addressRepository.findById(addressId).get();
             returnAddress.setZipcode(address.getZipcode());
             returnAddress.setType("PICKUP");
@@ -362,18 +504,17 @@ public class OrderManagementServiceImpl implements OrderManagementService {
         return order;
     }
 
-//    @Override
-    public Order addProductToOrderFromUserNameByProductName(String userName, String productName) {
+    //    @Override
+    public Order addProductToOrderFromUserNameByProductName(String username, String productName) {
 //        Order newOrder = orderRepository.save(order);
 //        log.info("New Order >>>>> {}", newOrder.toString());
         return null;
     }
 
 
-
     @Override
-    public Order createOrderByProductNameByUserName(String userName, String productName) {
-        Person person = personRepository.findByUserName(userName);
+    public Order createOrderByProductNameByUserName(String username, String productName) {
+        Person person = personRepository.findByUsername(username);
         Product product = productRepository.findByName(productName);
         Order order = new Order();
         order.setPeId(person.getPeId());
@@ -386,13 +527,13 @@ public class OrderManagementServiceImpl implements OrderManagementService {
     }
 
     @Override
-    public Collection<Order> getOrderByUserName(String userName) {
-        Person person = personRepository.findByUserName(userName);
+    public Collection<Order> getOrderByUserName(String username) {
+        Person person = personRepository.findByUsername(username);
         return person.getOrders();
     }
 
-    private Order setProductForOrder(Order order, Product product){
-        if(!CollectionUtils.isEmpty(order.getProducts())){
+    private Order setProductForOrder(Order order, Product product) {
+        if (!CollectionUtils.isEmpty(order.getProducts())) {
             order.getProducts().add(product);
         } else {
             Set<Product> productSet = new HashSet<Product>();
@@ -402,8 +543,8 @@ public class OrderManagementServiceImpl implements OrderManagementService {
         return order;
     }
 
-    private Person setOrderForPerson(Person person, Order order){
-        if(!CollectionUtils.isEmpty(person.getOrders())){
+    private Person setOrderForPerson(Person person, Order order) {
+        if (!CollectionUtils.isEmpty(person.getOrders())) {
             person.getOrders().add(order);
         } else {
             Set<Order> orderSet = new HashSet<Order>();
@@ -413,8 +554,8 @@ public class OrderManagementServiceImpl implements OrderManagementService {
         return person;
     }
 
-    private Person setProductForPerson(Person person, Product product){
-        if(!CollectionUtils.isEmpty(person.getProducts())){
+    private Person setProductForPerson(Person person, Product product) {
+        if (!CollectionUtils.isEmpty(person.getProducts())) {
             person.getProducts().add(product);
         } else {
             Set<Product> productSet = new HashSet<Product>();
@@ -424,8 +565,8 @@ public class OrderManagementServiceImpl implements OrderManagementService {
         return person;
     }
 
-    private Cart setProductForCart(Cart cart, Product product){
-        if(!CollectionUtils.isEmpty(cart.getProducts())){
+    private Cart setProductForCart(Cart cart, Product product) {
+        if (!CollectionUtils.isEmpty(cart.getProducts())) {
             cart.getProducts().add(product);
         } else {
             Set<Product> productSet = new HashSet<Product>();
@@ -435,8 +576,8 @@ public class OrderManagementServiceImpl implements OrderManagementService {
         return cart;
     }
 
-    private Order setShippingForOrder(Order order, Shipping shipping){
-        if(!CollectionUtils.isEmpty(order.getShipping())){
+    private Order setShippingForOrder(Order order, Shipping shipping) {
+        if (!CollectionUtils.isEmpty(order.getShipping())) {
             order.getShipping().add(shipping);
         } else {
             Set<Shipping> shippingSet = new HashSet<Shipping>();

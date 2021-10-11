@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="template/craftlayout :: head">
+</head>
+
+<body>
+    <div class="container-fluid m-0 p-0">
+        <!-- header -->
+        <div class="p-2">
+            <div th:replace="template/craftlayout :: header">Header</div>
+            <!--<div th:replace="${#strings.isEmpty(userDetail.emailId)} ?
+                ~{fragments/craftlayout :: header} :
+                ~{fragments/craftlayout :: headerwithuser}">
+            </div>-->
+
+            <!-- navbar start -->
+            <div th:replace="template/craftlayout :: navbar">Nav Bar</div>
+            <!-- navbar end -->
+        </div>
+        <!-- header end -->
+        <!-- ImageSlide start -->
+        <div>
+            <div th:replace="template/craftlayout :: carousel">Carousel</div>
+        </div>
+        <!-- ImageSlide end -->
+        <!-- Products items start -->
+        <div class="container" th:fragment="products">
+            <!-- Products items start -->
+            <div class="p-5">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                    <div class="card m-2 p-4" style="width: 15rem;">
+                        <img src="../static/images/a3.jpg" th:src="@{images/ganesh.jpeg}" class="card-img-top" alt="image">
+                        <div class="card-body text-center">
+                            <!-- <h5 class="card-title">Patachitra</h5> -->
+                            <p class="card-text">Stone Work</p>
+                            <a class="btn btn-warning" th:href="@{/productdetail(name='ball')}">View</a>
+                        </div>
+                    </div>
+                    <div class="card m-2 p-4" style="width: 15rem;">
+                        <img src="../static/images/a3.jpg" class="card-img-top" th:src="@{images/ganesh.jpeg}" alt="image">
+                        <div class="card-body text-center">
+                            <!-- <h5 class="card-title">Patachitra</h5> -->
+                            <p class="card-text">Stone Work</p>
+                            <a class="btn btn-warning" th:href="@{/productdetail(name='photo')}">View</a>
+                        </div>
+                    </div>
+                    <div class="card m-2 p-4" style="width: 15rem;">
+                        <img src="../static/images/a3.jpg" class="card-img-top" th:src="@{images/ganesh.jpeg}" alt="image">
+                        <div class="card-body text-center">
+                            <!-- <h5 class="card-title">Patachitra</h5> -->
+                            <p class="card-text">Stone Work</p>
+                            <a class="btn btn-warning" th:href="@{/productdetail}">View</a>
+                        </div>
+                    </div>
+                    <div class="card m-2 p-4" style="width: 15rem;">
+                        <img src="../static/images/a3.jpg" class="card-img-top" th:src="@{images/ganesh.jpeg}" alt="image">
+                        <div class="card-body text-center">
+                            <!-- <h5 class="card-title">Patachitra</h5> -->
+                            <p class="card-text">Stone Work</p>
+                            <a class="btn btn-warning" th:href="@{/productdetail}">View</a>
+                        </div>
+                    </div>
+                    <div class="card m-2 p-4" style="width: 15rem;">
+                        <img src="../static/images/a3.jpg" class="card-img-top" th:src="@{images/a3.jpg}" alt="image">
+                        <div class="card-body text-center">
+                            <!-- <h5 class="card-title">Patachitra</h5> -->
+                            <p class="card-text">Handcraft</p>
+                            <a href="#" class="btn btn-warning">View</a>
+                        </div>
+                    </div>
+                    <div class="card m-2 p-4" style="width: 15rem;">
+                        <img src="../static/images/a3.jpg" class="card-img-top" th:src="@{images/a3.jpg}" alt="image">
+                        <div class="card-body text-center">
+                            <!-- <h5 class="card-title">Patachitra</h5> -->
+                            <p class="card-text">Handcraft</p>
+                            <a href="#" class="btn btn-warning">View</a>
+                        </div>
+                    </div>
+                    <div class="card m-2 p-4" style="width: 15rem;">
+                        <img src="../static/images/a3.jpg" class="card-img-top" th:src="@{images/a3.jpg}" alt="image">
+                        <div class="card-body text-center">
+                            <!-- <h5 class="card-title">Patachitra</h5> -->
+                            <p class="card-text">Handcraft</p>
+                            <a href="#" class="btn btn-warning">View</a>
+                        </div>
+                    </div>
+                    <div class="card m-2 p-4" style="width: 15rem;">
+                        <img src="../static/images/a3.jpg" class="card-img-top" th:src="@{images/a3.jpg}" alt="image">
+                        <div class="card-body text-center">
+                            <!-- <h5 class="card-title">Patachitra</h5> -->
+                            <p class="card-text">Handcraft</p>
+                            <a href="#" class="btn btn-warning">View</a>
+                        </div>
+                    </div>
+                    <div class="card m-2 p-4" style="width: 15rem;">
+                        <img src="../static/images/a3.jpg" class="card-img-top" th:src="@{images/a3.jpg}" alt="image">
+                        <div class="card-body text-center">
+                            <!-- <h5 class="card-title">Patachitra</h5> -->
+                            <p class="card-text">Handcraft</p>
+                            <a href="#" class="btn btn-warning">View</a>
+                        </div>
+                    </div>
+                    <div class="card m-2 p-4" style="width: 15rem;">
+                        <img src="../static/images/a3.jpg" class="card-img-top" th:src="@{images/a3.jpg}" alt="image">
+                        <div class="card-body text-center">
+                            <!-- <h5 class="card-title">Patachitra</h5> -->
+                            <p class="card-text">Handcraft</p>
+                            <a href="#" class="btn btn-warning">View</a>
+                        </div>
+                    </div>
+                    <div class="card m-2 p-4" style="width: 15rem;">
+                        <img src="../static/images/a3.jpg" class="card-img-top" th:src="@{images/a3.jpg}" alt="image">
+                        <div class="card-body text-center">
+                            <!-- <h5 class="card-title">Patachitra</h5> -->
+                            <p class="card-text">Handcraft</p>
+                            <a href="#" class="btn btn-warning">View</a>
+                        </div>
+                    </div>
+                    <div class="card m-2 p-4" style="width: 15rem;">
+                        <img src="../static/images/a3.jpg" class="card-img-top" th:src="@{images/a3.jpg}" alt="image">
+                        <div class="card-body text-center">
+                            <!-- <h5 class="card-title">Patachitra</h5> -->
+                            <p class="card-text">Handcraft</p>
+                            <a href="#" class="btn btn-warning">View</a>
+                        </div>
+                    </div>
+                    <div>
+                        <table border="1">
+                            <thead>
+                            <tr>
+                                <th th:text="#{msg.id}" />
+                                <th th:text="#{msg.name}" />
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="product, iStat : ${productsPage.content}"
+                                th:style="${iStat.odd}? 'font-weight: bold;'"
+                                th:alt-title="${iStat.even}? 'even' : 'odd'">
+                                <td th:text="${product.name}" />
+                                <td th:text="${product.model}" />
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div th:if="${productsPage.totalPages > 0}" class="pagination"
+                             th:each="pageNumber : ${pageNumbers}">
+                            <a th:href="@{/products(size=${productsPage.size}, page=${pageNumber})}"
+                               th:text=${pageNumber}
+                               th:class="${pageNumber==productsPage.number + 1} ? active"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Products items End -->
+        </div>
+        <!-- Products items End -->
+    </div>
+    <!-- footer start -->
+    <div th:replace="template/craftlayout :: footer">footer</div>
+    <!-- footer end -->
+
+    <!-- Script -->
+    <script type="text/javascript" th:src="@{webjars/bootstrap/5.0.1/js/bootstrap.bundle.min.js}"></script>
+    <script type="text/javascript" th:src="@{webjars/font-awesome/5.15.3/js/all.min.js}"></script>
+</body>
+
+</html>

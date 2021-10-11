@@ -1,50 +1,51 @@
-<!--
-Created by IntelliJ IDEA.
-User: iuliana cosmina
-Date: 2020-05-26
-Time: 11:47
--->
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{template/layout :: head('Search books')}"></head>
+<head th:include="template/craftlayout :: head">
+</head>
 
 <body>
-<div id="wrap">
-    <div id="header" th:replace="~{template/layout :: header}" ></div>
-    <div class="center_content">
-        <div class="left_content" id="left_content" th:fragment="~{template/layout :: left_content}" >
-            <h1 id="pagetitle" th:text="#{login.title}">SEARCH TITLE</h1>
-            <div class="error" th:if="${exception ne null}">
-                 <th:block th:if="${#messages.msgOrNull('authentication.required')}" th:text="#{authentication.required}" />
-                 <th:block th:unless="${#messages.msgOrNull('authentication.required')}" th:text="${exception.message}"/>
-            </div>
-            <div class="error" th:if="${param.auth_error}" th:with="errorMsg=${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">
-                <span th:text="#{label.login.failed}"></span>:<span th:text="${errorMsg}"></span>
-            </div>
-            <form action="#" th:action="@{/login}" method="POST" id="loginForm">
-                <fieldset>
-                    <legend th:text="#{login.title}">LOGIN TITLE</legend>
-                    <table>
-                        <tr>
-                            <td th:text="#{account.username}">USERNAME</td>
-                            <td><input type="text" id="username" name="username" th:placeholder="#{account.username}"/></td>
-                        </tr>
-                        <tr>
-                            <td th:text="#{account.password}">PASSWORD</td>
-                            <td><input type="password" id="password" name="password" th:placeholder="#{account.password}"/></td>
-                        </tr>
-                        <tr><td colspan="2" align="center"><button id="login" th:text="#{button.login}">LOGIN</button></td></tr>
-                    </table>
-                </fieldset>
-            </form>
-        </div> <!-- end of left_content -->
-
-        <div class="right_content" id="right_content" th:replace="~{template/layout :: right_content}" ></div>
-        <div class="clear"></div>
-    </div> <!-- end of center_content -->
-
-    <div class="footer" id="footer" th:replace="~{template/layout :: footer}" ></div>
+<!-- header -->
+<div class="p-2">
+    <div th:replace="template/craftlayout :: header">Header</div>
+    <!-- navbar start -->
+    <div th:replace="template/craftlayout :: navbar">Nav Bar</div>
+    <!-- navbar end -->
 </div>
+<!-- header end -->
+<div class="border py-4"></div>
+<!-- Products items start -->
+<div class="text-center">
+    <h4>Login</h4>
+</div>
+<div class="row my-2">
+    <div class="col-4"></div>
+    <div class="col-4">
+        <form action="#" th:action="@{/login}" method="post">
+            <div class="mb-3">
+                <label for="username" class="form-label">Email</label>
+                <input type="text" class="form-control" id="username" name="username">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password">
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+        <div class="#">
+            <a class="forgot m-2" href="#">Forgot Password</a><a class="forgot m-2" href="#">Forgot Email</a>
+        </div>
+    </div>
+    <div class="col-4"></div>
+</div>
+<!-- footer start -->
+<div th:replace="template/craftlayout :: footer">footer</div>
+<!-- footer end -->
+
+<!-- Script -->
+<script type="text/javascript" th:src="@{webjars/bootstrap/5.0.1/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{webjars/font-awesome/5.15.3/js/all.min.js}"></script>
+
 </body>
+
 </html>

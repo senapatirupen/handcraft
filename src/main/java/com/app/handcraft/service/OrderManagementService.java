@@ -7,46 +7,60 @@ import java.util.List;
 
 public interface OrderManagementService {
 
-    public Cart createCartByUserName(String userName, Cart cart);
-    public Cart getCartByUserName(String userName);
+    public Cart createCartByUserName(String username, Cart cart);
+    public Cart getCartByUserName(String username);
     public Product createProduct(Product product);
+
+    void productSave();
+
     public Product getProductByName(String name);
 
     Collection<Product> viewAllProducts();
 
-    public Cart addProductToCartWithProductByUserName(String userName, Product product);
-    public Cart addProductToCartByNameForUserName(String userName, String name);
-    public Cart removeProductFromCartByNameForUserName(String userName, String productName, Long cartId);
-    public Collection<Order> createOrderByTransferProductFromCartToOrderByUserName(String userName);
-    public Order createOrderByProductNameByUserName(String userName, String productName);
-    public Collection<Order> getOrderByUserName(String userName);
-    public Order addBillingAddressToOrder(String userName, Long orderId);
-    public Order addShippingAndDeliveryAndDeliveryAddressToOrder(String userName, Long orderId, Long addressId,
+    public Cart addProductToCartWithProductByUserName(String username, Product product);
+    public Cart addProductToCartByNameForUserName(String username, String name);
+    public Cart removeProductFromCartByNameForUserName(String username, String productName, Long cartId);
+    public Collection<Order> createOrderByTransferProductFromCartToOrderByUserName(String username);
+    public Order createOrderByProductNameByUserName(String username, String productName);
+    public Collection<Order> getOrderByUserName(String username);
+    public Order addBillingAddressToOrder(String username, Long orderId);
+
+    Order addBillingAddressToOrder(String username, Address address);
+
+    Collection<Order> findOrdersByUserWithStatusSummary(String username);
+
+    public Order addShippingAndDeliveryAndDeliveryAddressToOrder(String username, Long orderId, Long addressId,
                                                                  DeliveryAddress deliveryAddress);
 
-    Order addDeliveryAddressToDeliveryForShippingOnOrder(String userName, Long orderId, Long addressId,
+    Order addDeliveryAddressToDeliveryForShippingOnOrder(String username, Long orderId, Long addressId,
                                                          DeliveryAddress deliveryAddress);
 
-    Order addShippingAndDeliveryToOrder(String userName, Long orderId);
+    Order addShippingAndDeliveryToOrder(String username, Long orderId);
 
-    Order addShippingAddressToShippingForOrder(String userName, Long orderId, Long shippingId,
+    Order addShippingAddressToShippingForOrder(String username, Long orderId, Long shippingId,
                                                ShippingAddress shippingAddress);
 
-    Order setDeliverAndShippingAsDoneForOrder(String userName, Long orderId);
+    Order setDeliverAndShippingAsDoneForOrder(String username, Long orderId);
 
-    Order setPaymentAsDoneForOrder(String userName, Long orderId);
+    Order setPaymentAsDoneForOrder(String username, Long orderId);
 
-    Order updateOrderAsDone(String userName, Long orderId);
+    Order updateOrderAsDone(String username, Long orderId);
 
-    Collection<Order> viewAllOrders(String userName);
+    Collection<Order> viewAllOrders(String username);
 
-    public Order addShippingAndReturnAndReturnAddressToOrder(String userName, Long orderId, Long addressId,
+    public Order addShippingAndReturnAndReturnAddressToOrder(String username, Long orderId, Long addressId,
                                                              ReturnAddress returnAddress);
 
-    Collection<Order> removeProductFromOrderByIds(String userName, Long orderId, List<Long> productIds);
+    Order createOrderByTransferProductFromCartToOrderByUserName(String username, String status);
 
-    Collection<Order> viewProductsFromOrder(String userName, Long orderId);
+    Order getOnlyOneOrderHavingStatusNewByUserName(String username);
 
-    public Order addPaymentToOrder(String userName, Long orderId);
+    Address findAddressById(Long id);
+
+    Collection<Order> removeProductFromOrderByIds(String username, Long orderId, List<Long> productIds);
+
+    Collection<Order> viewProductsFromOrder(String username, Long orderId);
+
+    public Order addPaymentToOrder(String username, Long orderId);
 
 }

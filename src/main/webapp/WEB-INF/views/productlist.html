@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="template/craftlayout :: head">
+</head>
+
+<body>
+<!-- header -->
+<div class="p-2">
+    <div th:replace="template/craftlayout :: header">Header</div>
+    <!-- navbar start -->
+    <div th:replace="template/craftlayout :: navbar">Nav Bar</div>
+    <!-- navbar end -->
+</div>
+<!-- header end -->
+<div class="container">
+    <div class="row my-2">
+        <div class="col-12 text-center"><h3>Product List</h3></div>
+        <div class="col-3">
+            <ul class="list-group">
+                <li class="list-group-item"><a class="list-group-item" th:href="@{/product}">Product</a>
+                </li>
+                <li class="list-group-item"><a class="list-group-item" th:href="@{/productadd}">Add Product</a></li>
+                <li class="list-group-item"><a class="list-group-item" th:href="@{/productsearch}">Search Product</a>
+                </li>
+                <li class="list-group-item active" aria-current="true"><a class="list-group-item" th:href="@{/productlist}">List Of Product</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-9 border">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Model</th>
+                    <th scope="col">Product Status</th>
+                    <th scope="col">Edit</th>
+                    <th scope="col">Remove</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="adminProduct: ${adminProducts}">
+                    <td th:text="${adminProduct.adPrId}"></td>
+                    <td th:text="${adminProduct.name}"></td>
+                    <td th:text="${adminProduct.model}"></td>
+                    <td th:text="${adminProduct.productStatus}"></td>
+                    <td><a class="btn btn-warning" th:href="@{/productedit(name=${adminProduct.name})}">Edit</a></td>
+                    <td><a class="btn btn-warning" th:href="@{/productremove(id=${adminProduct.adPrId})}">Remove</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Products items End -->
+<!-- footer start -->
+<div th:replace="template/craftlayout :: footer">footer</div>
+<!-- footer end -->
+<script type="text/javascript" th:src="@{webjars/bootstrap/5.0.1/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{webjars/font-awesome/5.15.3/js/all.min.js}"></script>
+</body>
+
+</html>

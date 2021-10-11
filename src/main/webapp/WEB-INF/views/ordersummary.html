@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="template/craftlayout :: head">
+</head>
+
+<body>
+<div class="container-fluid m-0 p-0">
+<!-- header -->
+<div class="p-2">
+    <div th:replace="template/craftlayout :: header">Header</div>
+    <!-- navbar start -->
+    <div th:replace="template/craftlayout :: navbar">Nav Bar</div>
+    <!-- navbar end -->
+</div>
+<!-- header end -->
+        <div class="col-12 text-center"><h3>Order Summary</h3></div>
+        <!-- Products items start -->
+        <div class="row my-2">
+            <div class="col-8 border">
+                <div class="row m-2">
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${address.type}">Home Address</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                                <p class="card-text" th:text="${address.addressLineOne}">Some quick example text to build on the card title and make up the
+                                    bulk of the card's content.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="col-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Office Address</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                                <p class="card-text">Some quick example text to build on the card title and make up the
+                                    bulk of the card's content.</p>
+                            </div>
+                            <div class="row p-2">
+                                <div class="col-2">
+                                    <button type="button" class="btn btn-warning">Edit</button>
+                                </div>
+                                <div class="col-2 text-end">
+                                    <button type="button" class="btn btn-warning">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row m-2">
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Home Address</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                                <p class="card-text">Some quick example text to build on the card title and make up the
+                                    bulk of the card's content.</p>
+                            </div>
+                            <div class="row p-2">
+                                <div class="col-2">
+                                    <button type="button" class="btn btn-warning">Edit</button>
+                                </div>
+                                <div class="col-2 text-end">
+                                    <button type="button" class="btn btn-warning">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Office Address</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                                <p class="card-text">Some quick example text to build on the card title and make up the
+                                    bulk of the card's content.</p>
+                            </div>
+                            <div class="row p-2">
+                                <div class="col-2">
+                                    <button type="button" class="btn btn-warning">Edit</button>
+                                </div>
+                                <div class="col-2 text-end">
+                                    <button type="button" class="btn btn-warning">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>-->
+                </div>
+            </div>
+            <div class="col-4 border">
+                <table class="table table-striped caption-top">
+                    <caption th:if="${order.expectedDate != null}" th:text="${' Expected Self Pick Up Date: '+ order.expectedDate }">List of users</caption>
+                    <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Model</th>
+                        <th scope="col">Product Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="product: ${products}">
+                        <td th:text="${product.name}"></td>
+                        <td th:text="${product.model}"></td>
+                        <td th:text="${product.productStatus}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Products items End -->
+<!-- footer start -->
+<div th:replace="template/craftlayout :: footer">footer</div>
+<!-- footer end -->
+<script type="text/javascript" th:src="@{webjars/bootstrap/5.0.1/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{webjars/font-awesome/5.15.3/js/all.min.js}"></script>
+
+</body>
+
+</html>
