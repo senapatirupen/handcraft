@@ -16,9 +16,15 @@
 <!-- header end -->
         <div class="col-12 text-center"><h3>Delivery Details For Order</h3></div>
         <!-- Products items start -->
-        <div class="row my-2" th:if="${#lists.size(products) == 0}">
+        <div class="row m-4" th:if="${#lists.size(products) == 0}">
             <div class="col-5">
-                <h3>Sorry Currently You Do Not Have Any Product To Place Order</h3>
+                <div class="card border-warning">
+                    <div class="card-header">
+                        Sorry Currently You Do Not Have Any Product To Place Order
+                    </div>
+                    <div class="card-body">
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row m-4" th:if="${#lists.size(products) > 0}">
@@ -123,7 +129,7 @@
                     </div>
                 </form>
             </div>
-            <div class="col-4 m-4 border">
+            <div class="col-6 border">
                 <table class="table table-striped">
                     <thead>
                     <tr>

@@ -21,23 +21,30 @@
 <div class="row my-2">
     <div class="col-4"></div>
     <div class="col-4">
-        <form action="#" th:action="@{/login}" method="post">
+        <form action="#" th:action="@{/retrieve}" th:object="${userDetail}" method="post">
             <div class="mb-3">
-                <label for="username" class="form-label">Email</label>
-                <input type="text" class="form-control" id="username" name="username">
+                <label for="phonenumber" class="form-label">phone number</label>
+                <input type="text" th:field="*{phoneNumber}" class="form-control" id="phonenumber" name="phonenumber">
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" name="password">
+                <input type="password" th:field="*{password}" class="form-control" id="password" name="password">
             </div>
-            <button type="submit" class="btn btn-primary">Login</button>
+
+            <button type="submit" class="btn btn-primary">View</button>
         </form>
-        <div class="mx-2">
-            <a class="forgot m-2" href="#" th:href="@{/reset}">Forgot Password</a>
-            <a class="forgot m-2" href="#" th:href="@{/retrieve}">Forgot Email</a>
-        </div>
     </div>
-    <div class="col-4"></div>
+    <div class="col-4">
+    </div>
+</div>
+<div class="row my-2">
+    <div class="col-4">
+    </div>
+    <div class="col-4">
+        <p th:if="${userDetail.emailId != null}" th:text="${userDetail.emailId}">Email</p>
+    </div>
+    <div class="col-4">
+    </div>
 </div>
 <!-- footer start -->
 <div th:replace="template/craftlayout :: footer">footer</div>

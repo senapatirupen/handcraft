@@ -129,6 +129,12 @@ public class UserInteractionServiceImpl implements UserInteractionService {
     @Override
     public Address createAddress(String username, Address address) {
         Person person = findPersonByUserName(username);
+        address.setCreatedBy(username);
+        address.setCreatedDate(new Date());
+        address.setLastModifiedBy(username);
+        address.setLastModifiedDate(new Date());
+        address.setIsActive(true);
+        address.setStatus("OPEN");
         addressRepository.save(address);
         person.getAddresses().add(address);
         personRepository.save(person);
@@ -153,6 +159,8 @@ public class UserInteractionServiceImpl implements UserInteractionService {
         existAddress.setState(address.getState());
         existAddress.setZipcode(address.getZipcode());
         existAddress.setType(address.getType());
+        existAddress.setLastModifiedBy(username);
+        existAddress.setLastModifiedDate(new Date());
         existAddress = addressRepository.save(existAddress);
         log.info("Updated Address >>>>> {}", existAddress.toString());
         return existAddress;
@@ -182,16 +190,18 @@ public class UserInteractionServiceImpl implements UserInteractionService {
 
     @Override
     public UserDetail resetPassword(UserDetail userDetail){
-        UserDetail userDetail1 = findByPhoneNumberOrEmailId(userDetail.getStatus());
-        if(Objects.isNull(userDetail1.getUsId())) {
+        userDetail = findUserDetailByUserName(userDetail.getUsername());
+        if(Objects.isNull(userDetail.getUsId())) {
             userDetail.setStatus("User Not Found");
             return userDetail;
         }
         else {
-            userDetail1.setPassword(userDetail.getPassword());
-            userDetailRepository.save(userDetail1);
+            userDetail.setPassword(new BCryptPasswordEncoder().encode(userDetail.getPassword()));
+            userDetail.setRePassword(new BCryptPasswordEncoder().encode(userDetail.getRePassword()));
+            userDetail.setLastModifiedDate(new Date());
+            userDetailRepository.save(userDetail);
         }
-        return userDetail1;
+        return userDetail;
     }
 
 
@@ -200,6 +210,7 @@ public class UserInteractionServiceImpl implements UserInteractionService {
         Boolean valid = validateUserDetail(userDetail).containsKey(true);
         UserDetail newUserDetail = null;
         if (!valid) {
+            userDetail.setUsername(userDetail.getEmailId());
             userDetail.setCreatedBy(userDetail.getUsername());
             userDetail.setCreatedDate(new Date());
             userDetail.setLastModifiedBy(userDetail.getUsername());
@@ -207,11 +218,17 @@ public class UserInteractionServiceImpl implements UserInteractionService {
             userDetail.setIsActive(true);
             userDetail.setStatus("Active");
 //            userDetail.setDob(dateUtil.dateToDate(userDetail.getDob()));
-            userDetail.setUsername(userDetail.getEmailId());
+//            userDetail.setUsername(userDetail.getEmailId());
             userDetail.setPassword(new BCryptPasswordEncoder().encode(userDetail.getPassword()));
             userDetail.setRePassword(new BCryptPasswordEncoder().encode(userDetail.getRePassword()));
             newUserDetail = userDetailRepository.save(userDetail);
             Person person = new Person();
+            person.setCreatedBy(userDetail.getUsername());
+            person.setCreatedDate(new Date());
+            person.setLastModifiedBy(userDetail.getUsername());
+            person.setLastModifiedDate(new Date());
+            person.setIsActive(true);
+            person.setStatus("Active");
             person.setUserDetail(newUserDetail);
             personRepository.save(person);
             log.info("New Person >>>>> {}", person.toString());

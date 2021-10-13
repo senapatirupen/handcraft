@@ -33,28 +33,20 @@ public class Person extends AuditLog {
     private Cart cart;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "PE_ID")
-    private Collection<Product> products;
+    private Set<Product> products = new HashSet<>();
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "person_product", joinColumns = @JoinColumn(name = "id"))
+    private Set<String> productNames = new HashSet<String>();
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "PE_ID")
-    private Collection<Order> orders;
+    private Set<Order> orders = new HashSet<>();
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "PE_ID")
-    private Set<Address> addresses;
+    private Set<Address> addresses = new HashSet<>();
 
-    public Person addAddress(Address address) {
-        if (!CollectionUtils.isEmpty(this.addresses)) {
-            this.addresses.add(address);
-        } else {
-            this.addresses = new HashSet<>();
-            this.addresses.add(address);
-        }
+    public Person addOrder(Order order) {
+        this.orders.add(order);
         return this;
     }
 
-    public Person removeAddress(Address address) {
-        if (!CollectionUtils.isEmpty(this.addresses)) {
-            this.addresses.remove(address);
-        }
-        return this;
-    }
 }

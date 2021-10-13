@@ -4,6 +4,8 @@ import com.app.handcraft.entity.*;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 public interface OrderManagementService {
 
@@ -50,6 +52,8 @@ public interface OrderManagementService {
 
     public Order addShippingAndReturnAndReturnAddressToOrder(String username, Long orderId, Long addressId,
                                                              ReturnAddress returnAddress);
+
+    Optional<Set<Product>> findProductByNames(Set<String> names);
 
     Order createOrderByTransferProductFromCartToOrderByUserName(String username, String status);
 

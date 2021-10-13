@@ -1,3 +1,5 @@
+--JPQL https://www.baeldung.com/spring-data-derived-queries
+
 UPDATE `pattachitra`.`pe_order` SET `status` = 'NEW' WHERE (`od_id` = '1');
 
 SET FOREIGN_KEY_CHECKS = 0;

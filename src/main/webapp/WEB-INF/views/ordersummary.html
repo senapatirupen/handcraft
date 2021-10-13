@@ -17,15 +17,28 @@
         <div class="col-12 text-center"><h3>Order Summary</h3></div>
         <!-- Products items start -->
         <div class="row my-2">
-            <div class="col-8 border">
+            <div class="col-6 border">
                 <div class="row m-2">
                     <div class="col-6">
-                        <div class="card">
+                        <!--<div class="card">
                             <div class="card-body">
-                                <h5 class="card-title" th:text="${address.type}">Home Address</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                                <h5 class="card-title" >Order Delivery Address</h5>
+                                <h4 class="card-subtitle mb-2 text-muted" th:text="${address.type}"></h4>
                                 <p class="card-text" th:text="${address.addressLineOne}">Some quick example text to build on the card title and make up the
                                     bulk of the card's content.</p>
+                            </div>
+                        </div>-->
+                        <div class="card">
+                            <div class="card-header">
+                                Order Delivery Address
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text" th:text="${address.addressLineOne}">Address Line One</p>
+                                <p class="card-text" th:text="${address.addressLineTwo}">Address Line Two</p>
+                                <p class="card-text" th:text="${address.country}">Country</p>
+                                <p class="card-text" th:text="${address.state}">State</p>
+                                <p class="card-text" th:text="${address.zipcode}">Zipcode</p>
+                                <p class="card-text" th:text="${address.type}">Type</p>
                             </div>
                         </div>
                     </div>
@@ -87,8 +100,32 @@
                     </div>-->
                 </div>
             </div>
-            <div class="col-4 border">
-                <table class="table table-striped caption-top">
+            <div class="col-6 border">
+                <div class="card">
+                    <div class="card-header">
+                        List Of Products
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped caption-top">
+                            <caption th:if="${order.expectedDate != null}" th:text="${' Expected Self Pick Up Date: '+ order.expectedDate }">Pick Up Date</caption>
+                            <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Model</th>
+                                <th scope="col">Product Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="product: ${products}">
+                                <td th:text="${product.name}"></td>
+                                <td th:text="${product.model}"></td>
+                                <td th:text="${product.productStatus}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!--<table class="table table-striped caption-top">
                     <caption th:if="${order.expectedDate != null}" th:text="${' Expected Self Pick Up Date: '+ order.expectedDate }">List of users</caption>
                     <thead>
                     <tr>
@@ -104,7 +141,7 @@
                         <td th:text="${product.productStatus}"></td>
                     </tr>
                     </tbody>
-                </table>
+                </table>-->
             </div>
         </div>
     </div>

@@ -26,20 +26,4 @@ public class AuditLog implements Serializable {
     protected Boolean isActive;
     @Column(name = "STATUS", nullable = false, unique = false)
     protected String status;
-
-    @PrePersist
-    public void onPrePersist() {
-        setCreatedBy("Rupen");
-        setCreatedDate(new Date());
-        setLastModifiedBy("Rupen");
-        setLastModifiedDate(new Date());
-        setIsActive(true);
-        setStatus("Active");
-    }
-
-    @PreRemove
-    @PreUpdate
-    public void onPreUpdate() {
-        setLastModifiedDate(new Date());
-    }
 }

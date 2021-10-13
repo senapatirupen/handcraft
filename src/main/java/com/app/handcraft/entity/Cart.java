@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "CART")
@@ -26,5 +28,8 @@ public class Cart extends AuditLog {
     private Long peId;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "CA_ID")
-    private Collection<Product> products;
+    private Set<Product> products = new HashSet<>();
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "cart_product", joinColumns = @JoinColumn(name = "id"))
+    private Set<String> productNames = new HashSet<String>();
 }

@@ -89,7 +89,35 @@ public class EcomHomeController {
         return "index";
     }
 
-    @RequestMapping(value = "/signOut")
+    @RequestMapping(value = "/reset")
+    public String resetPasswordPage(Model model) {
+        model.addAttribute("userDetail", new UserDetail());
+        return "reset";
+    }
+
+    @RequestMapping(value = "/reset", method = POST)
+    public String processResetPasswordPage(Model model, @ModelAttribute UserDetail userDetail) {
+        userDetail = userInteractionService.resetPassword(userDetail);
+        log.info("processResetPasswordPage() " + userDetail);
+        model.addAttribute("userDetail", userDetail);
+        return "index";
+    }
+
+    @RequestMapping(value = "/retrieve")
+    public String retrieveMailPage(Model model) {
+        model.addAttribute("userDetail", new UserDetail());
+        return "retrieve";
+    }
+
+    @RequestMapping(value = "/retrieve", method = POST)
+    public String processRetrieveMailPage(Model model, @ModelAttribute UserDetail userDetail) {
+        userDetail = userInteractionService.findUserDetailByPhoneNumber(userDetail.getPhoneNumber());
+        log.info("processResetPasswordPage() " + userDetail);
+        model.addAttribute("userDetail", userDetail);
+        return "retrieve";
+    }
+
+    /*@RequestMapping(value = "/signOut")
     public String signOutPage(Model model) {
         model.addAttribute("userDetail", new UserDetail());
         return "index";
@@ -100,7 +128,7 @@ public class EcomHomeController {
         log.info("userPage() " + userDetail.getEmailId());
         model.addAttribute("userDetail", userDetail);
         return "headerwithuser";
-    }
+    }*/
 
     @RequestMapping(value = "/profile")
     public String userProfilePage(Model model, @ModelAttribute UserDetail userDetail) {
@@ -141,8 +169,8 @@ public class EcomHomeController {
 
     private Address defaultAddress() {
         return Address.builder().addressLineOne("address line one")
-                .addressLineTwo("address line two").landmark("near temple")
-                .state("orissa").country("India").zipcode("752012")
+                .addressLineTwo("address line two").landmark("landmark")
+                .state("state").country("country").zipcode("000000")
                 .type("Home").build();
     }
 
@@ -177,6 +205,21 @@ public class EcomHomeController {
         model.addAttribute("userDetail", userDetail);
         userInteractionService.updateAddress(userDetail.getUsername(), address);
         model.addAttribute("address", address);
+        return "redirect:profileaddress";
+    }
+
+    @RequestMapping(value = "/profileaddressremove")
+    public String userProfileAddressRemovePage(Model model, @ModelAttribute UserDetail userDetail, @RequestParam String id) {
+        log.info("userProfileUpdatePage() " + userDetail.getEmailId());
+        userInteractionService.removeAddress(userDetail.getUsername(), Long.parseLong(id));
+        model.addAttribute("userDetail", userDetail);
+        Set<Address> addresses = userInteractionService.allAddresses(userDetail.getUsername());
+        if (!CollectionUtils.isEmpty(addresses)) {
+            model.addAttribute("addresses", addresses);
+        } else {
+            addresses.add(defaultAddress());
+        }
+        model.addAttribute("addresses", addresses);
         return "redirect:profileaddress";
     }
 
@@ -223,9 +266,9 @@ public class EcomHomeController {
         log.info("userProfileUpdatePage() " + userDetail.getEmailId());
         model.addAttribute("userDetail", userDetail);
         Cart cart = orderManagementService.getCartByUserName(userDetail.getUsername());
-        Collection<Product> products = null;
-        if (!CollectionUtils.isEmpty(cart.getProducts())) {
-            products = (List<Product>) cart.getProducts();
+        Set<Product> products = null;
+        if (!CollectionUtils.isEmpty(cart.getProductNames())) {
+            products = orderManagementService.findProductByNames(cart.getProductNames()).get();
         } else {
             Order order = orderManagementService.getOnlyOneOrderHavingStatusNewByUserName(userDetail.getUsername());
             if (!Objects.isNull(order) && !CollectionUtils.isEmpty(order.getProducts())) {
@@ -233,9 +276,20 @@ public class EcomHomeController {
             }
         }
         if (Objects.isNull(products))
-            products = new ArrayList<>();
+            products = new HashSet<>();
         model.addAttribute("products", products);
         return "cart";
+    }
+
+    @RequestMapping(value = "/removeproductfromcart")
+    public String cartPage(Model model, @ModelAttribute UserDetail userDetail, @RequestParam(value = "name", required = false) String name) {
+        log.info("userProfileUpdatePage() " + userDetail.getEmailId());
+        model.addAttribute("userDetail", userDetail);
+        Cart cart = orderManagementService.getCartByUserName(userDetail.getUsername());
+        orderManagementService.removeProductFromCartByNameForUserName(userDetail.getUsername(), name, cart.getCaId());
+        Set<Product> products = orderManagementService.findProductByNames(cart.getProductNames()).get();
+        model.addAttribute("products", products);
+        return "redirect:cart";
     }
 
     @RequestMapping(value = "/placeorder")
@@ -244,8 +298,10 @@ public class EcomHomeController {
         model.addAttribute("userDetail", userDetail);
         Cart cart = orderManagementService.getCartByUserName(userDetail.getUsername());
         Order order = null;
+        Set<Product> products = null;
         try {
             order = orderManagementService.createOrderByTransferProductFromCartToOrderByUserName(userDetail.getUsername(), "NEW");
+            products = orderManagementService.findProductByNames(order.getProductNames()).get();
         } catch (NoSuchElementException e) {
             log.info("Order Not Found");
         }
@@ -259,12 +315,12 @@ public class EcomHomeController {
         for (Address address : addresses) {
             addresslist.add(AddressFormatter.addressFormat(address));
         }
-        if (Objects.isNull(order)) {
-            order = Order.builder().products(new ArrayList<>()).build();
+        if (Objects.isNull(order) || Objects.isNull(products)) {
+            products = new HashSet<>();
         }
         model.addAttribute("addresslist", addresslist);
         model.addAttribute("address", new Address());
-        model.addAttribute("products", order.getProducts());
+        model.addAttribute("products", products);
         return "order";
     }
 
@@ -273,7 +329,7 @@ public class EcomHomeController {
         log.info("userProfileUpdatePage() " + userDetail.getEmailId());
         model.addAttribute("userDetail", userDetail);
         Order order = orderManagementService.addBillingAddressToOrder(userDetail.getUsername(), address);
-        Collection<Product> products = order.getProducts();
+        Set<Product> products = orderManagementService.findProductByNames(order.getProductNames()).get();
         model.addAttribute("order", order);
         model.addAttribute("products", products);
         if (!Objects.isNull(order.getBillingAddress()))
@@ -281,17 +337,6 @@ public class EcomHomeController {
         else
             model.addAttribute("address", defaultAddress());
         return "ordersummary";
-    }
-
-    @RequestMapping(value = "/removeproductfromcart")
-    public String cartPage(Model model, @ModelAttribute UserDetail userDetail, @RequestParam(value = "name", required = false) String name) {
-        log.info("userProfileUpdatePage() " + userDetail.getEmailId());
-        model.addAttribute("userDetail", userDetail);
-        Cart cart = orderManagementService.getCartByUserName(userDetail.getUsername());
-        orderManagementService.removeProductFromCartByNameForUserName(userDetail.getUsername(), name, cart.getCaId());
-        Set<Product> products = (Set<Product>) cart.getProducts();
-        model.addAttribute("products", products);
-        return "redirect:cart";
     }
 
     @RequestMapping(value = "/orders")

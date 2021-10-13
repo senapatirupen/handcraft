@@ -22,13 +22,18 @@
             </div>
         </div>
         <div class="row m-4" th:if="${#lists.size(orders) > 0}">
-            <div class="col-6 border">
+            <div class="col-3">
+                <ul class="list-group">
+                    <li class="list-group-item active" aria-current="true"><a class="list-group-item" th:href="@{/profile}">Detail</a></li>
+                    <li class="list-group-item"><a class="list-group-item" th:href="@{/profileaddress}">Address</a></li>
+                    <li class="list-group-item"><a class="list-group-item" th:href="@{/profileorders}">Order History</a></li>
+                </ul>
             </div>
-            <div class="col-4 m-4 border">
+            <div class="col-9 border">
                 <table class="table table-striped" th:each="order: ${orders}">
                     <thead>
                     <tr>
-                        <th scope="col">Name</th>
+                        <th scope="col">Order Id</th>
                         <th scope="col">Status</th>
                         <th scope="col">Products</th>
                     </tr>
@@ -38,17 +43,15 @@
                         <td th:text="${order.odId}"></td>
                         <td th:text="${order.status}"></td>
                         <td>
-                            <table class="table table-striped" th:each="product: ${order.products}">
+                            <table class="table table-striped" th:each="name: ${order.productNames}">
                                 <thead>
                                 <tr>
                                     <th scope="col">Name</th>
-                                    <th scope="col">Model</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td th:text="${product.name}"></td>
-                                    <td th:text="${product.model}"></td>
+                                    <td th:text="${name}"></td>
                                 </tr>
                                 </tbody>
                             </table>

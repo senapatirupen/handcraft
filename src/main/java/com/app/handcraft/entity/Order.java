@@ -10,6 +10,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="PE_ORDER")
@@ -41,10 +43,13 @@ public class Order extends AuditLog {
     private Date expectedDate;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="OD_ID")
-    private Collection<Product> products;
+    private Set<Product> products = new HashSet<>();
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "order_product", joinColumns = @JoinColumn(name = "id"))
+    private Set<String> productNames = new HashSet<String>();
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="OD_ID")
-    private Collection<Shipping> shipping;
+    private Set<Shipping> shipping = new HashSet<>();
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name="PA_ID")
     @JsonIgnore

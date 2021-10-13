@@ -132,7 +132,14 @@ public class OrderManagementServiceImpl implements OrderManagementService {
             personRepository.save(person);
         }
         Product product = productRepository.findByName(productName);
-        setProductForCart(cart, product);
+        if (cart.getProductNames().size() == 0)
+            cart.getProductNames().add(productName);
+        Optional<String> name = cart.getProductNames().stream().filter(p -> p.equalsIgnoreCase(productName)).findAny();
+        if (!name.isPresent()) {
+            cart.getProductNames().add(productName);
+        }
+//        cart.getProductNames().add(productName);
+//        setProductForCart(cart, product);
         cartRepository.save(cart);
         return cart;
     }
@@ -146,8 +153,10 @@ public class OrderManagementServiceImpl implements OrderManagementService {
 //        Product product = productRepository.findProductByCartId(cart.getCaId());
 //        product.setCaId(null);
 //        productRepository.save(product);
-        Product product = cart.getProducts().stream().filter(p -> productName.equalsIgnoreCase(p.getName())).findAny().get();
-        cart.getProducts().remove(product);
+//        Product product = cart.getProducts().stream().filter(p -> productName.equalsIgnoreCase(p.getName())).findAny().get();
+//        cart.getProducts().remove(product);
+        cart.getProductNames().stream().filter(p -> p.equalsIgnoreCase(productName)).findAny();
+        cart.getProductNames().remove(productName);
 //        Cart cart = personRepository.findCartByUserName(username);
 //        cartRepository.findProduct
 //        setProductForCart(cart, product);
@@ -161,9 +170,15 @@ public class OrderManagementServiceImpl implements OrderManagementService {
         Cart cart = person.getCart();
         if (!CollectionUtils.isEmpty(cart.getProducts())) {
             Order order = new Order();
+            order.setCreatedBy(username);
+            order.setCreatedDate(new Date());
+            order.setLastModifiedBy(username);
+            order.setLastModifiedDate(new Date());
+            order.setIsActive(true);
+            order.setStatus("OPEN");
             order.setPeId(person.getPeId());
             Order newOrder = orderRepository.save(order);
-            Collection<Product> products = cart.getProducts();
+            Set<Product> products = cart.getProducts();
             products.stream().forEach(product -> {
                 product.setCaId(null);
                 product.setOdId(newOrder.getOdId());
@@ -174,7 +189,7 @@ public class OrderManagementServiceImpl implements OrderManagementService {
             cartRepository.save(cart);
             setOrderForPerson(person, order);
             personRepository.save(person);
-            order.setStatus("NEW");
+            order.setOrderStatus("NEW");
             orderRepository.save(order);
             log.info("New Order >>>>> {}", newOrder.toString());
         }
@@ -182,29 +197,32 @@ public class OrderManagementServiceImpl implements OrderManagementService {
     }
 
     @Override
+    public Optional<Set<Product>> findProductByNames(Set<String> names) {
+        return productRepository.findByNameIn(names);
+    }
+
+    @Override
     public Order createOrderByTransferProductFromCartToOrderByUserName(String username, String status) {
         Person person = personRepository.findByUsername(username);
         Cart cart = person.getCart();
-        Order order = null;
         Optional<Order> existing = orderRepository.findOrderByPersonIdAndStatus(person.getPeId(), status);
-        if (!CollectionUtils.isEmpty(cart.getProducts()) && !existing.isPresent()) {
-            order = new Order();
+        if (!CollectionUtils.isEmpty(cart.getProductNames()) && !existing.isPresent()) {
+            Order order = new Order();
             order.setPeId(person.getPeId());
-            Order newOrder = orderRepository.save(order);
-            Collection<Product> products = cart.getProducts();
-            products.stream().forEach(product -> {
-                product.setCaId(null);
-                product.setOdId(newOrder.getOdId());
-                productRepository.save(product);
-            });
-            order.setProducts(products);
-            cart.setProducts(null);
-            cartRepository.save(cart);
-            setOrderForPerson(person, order);
-            personRepository.save(person);
-            order.setStatus("NEW");
+            order.setProductNames(new HashSet<>(cart.getProductNames()));
+            order.setOrderStatus("NEW");
+            order.setCreatedDate(new Date());
+            order.setCreatedBy(username);
+            order.setLastModifiedDate(new Date());
+            order.setLastModifiedBy(username);
+            order.setIsActive(true);
+            order.setStatus("OPEN");
             orderRepository.save(order);
-            log.info("New Order >>>>> {}", newOrder.toString());
+            cart.setProductNames(new HashSet<>());
+            cartRepository.save(cart);
+            person.addOrder(order);
+            personRepository.save(person);
+            log.info("New Order >>>>> {}", order.toString());
             return order;
         }
         return existing.get();
@@ -273,6 +291,12 @@ public class OrderManagementServiceImpl implements OrderManagementService {
         BillingAddress billingAddress = new BillingAddress();
         billingAddress.setZipcode(address.getZipcode());
         billingAddress.setOdId(orderId);
+        billingAddress.setCreatedBy(username);
+        billingAddress.setCreatedDate(new Date());
+        billingAddress.setLastModifiedBy(username);
+        billingAddress.setLastModifiedDate(new Date());
+        billingAddress.setIsActive(true);
+        billingAddress.setStatus("OPEN");
         billingAddressRepository.save(billingAddress);
         order.setBillingAddress(billingAddress);
         orderRepository.save(order);
@@ -302,6 +326,12 @@ public class OrderManagementServiceImpl implements OrderManagementService {
                     .type("DELIVERY")
                     .odId(order.getOdId())
                     .build();
+            billingAddress.setCreatedBy(username);
+            billingAddress.setCreatedDate(new Date());
+            billingAddress.setLastModifiedBy(username);
+            billingAddress.setLastModifiedDate(new Date());
+            billingAddress.setIsActive(true);
+            billingAddress.setStatus("OPEN");
             billingAddressRepository.save(billingAddress);
             order.setBillingAddress(billingAddress);
         } else if (!StringUtils.isBlank(address.getAddressLineOne()) && !StringUtils.isBlank(address.getAddressLineTwo())) {
@@ -314,13 +344,19 @@ public class OrderManagementServiceImpl implements OrderManagementService {
                     .type("DELIVERY")
                     .odId(order.getOdId())
                     .build();
+            billingAddress.setCreatedBy(username);
+            billingAddress.setCreatedDate(new Date());
+            billingAddress.setLastModifiedBy(username);
+            billingAddress.setLastModifiedDate(new Date());
+            billingAddress.setIsActive(true);
+            billingAddress.setStatus("OPEN");
             billingAddressRepository.save(billingAddress);
             order.setBillingAddress(billingAddress);
         } else if (status.length() == 11) {
             Date pickupDate = DateUtil.stringToDate(status.substring(1));
             order.setExpectedDate(pickupDate);
         }
-        order.setStatus("SUMMARY");
+        order.setOrderStatus("SUMMARY");
         orderRepository.save(order);
         return order;
     }
