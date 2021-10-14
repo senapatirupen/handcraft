@@ -97,9 +97,9 @@ public class EcomHomeController {
 
     @RequestMapping(value = "/reset", method = POST)
     public String processResetPasswordPage(Model model, @ModelAttribute UserDetail userDetail) {
-        userDetail = userInteractionService.resetPassword(userDetail);
-        log.info("processResetPasswordPage() " + userDetail);
-        model.addAttribute("userDetail", userDetail);
+        UserDetail userDetail1 = userInteractionService.resetPassword(userDetail);
+        log.info("processResetPasswordPage() " + userDetail1);
+        model.addAttribute("userDetail", userDetail1);
         return "index";
     }
 
@@ -221,6 +221,15 @@ public class EcomHomeController {
         }
         model.addAttribute("addresses", addresses);
         return "redirect:profileaddress";
+    }
+
+    @RequestMapping(value = "/profileclosedorders")
+    public String profileClosedOrdersPage(Model model, @ModelAttribute UserDetail userDetail) {
+        log.info("userProfileUpdatePage() " + userDetail.getEmailId());
+        model.addAttribute("userDetail", userDetail);
+        Collection<Order> orders = orderManagementService.findOrdersByUserWithStatusClosed(userDetail.getUsername());
+        model.addAttribute("orders", orders);
+        return "profileclosedorders";
     }
 
     @RequestMapping(value = "/products")

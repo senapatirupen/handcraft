@@ -373,6 +373,16 @@ public class OrderManagementServiceImpl implements OrderManagementService {
     }
 
     @Override
+    public Collection<Order> findOrdersByUserWithStatusClosed(String username) {
+        Person person = personRepository.findByUsername(username);
+        Collection<Order> orders = orderRepository.findOrdersByPersonIdAndStatusClosed(person.getPeId(), "CLOSED");
+        if (!CollectionUtils.isEmpty(orders))
+            return orders;
+        else
+            return null;
+    }
+
+    @Override
     public Order addShippingAndDeliveryAndDeliveryAddressToOrder(String username, Long orderId, Long addressId,
                                                                  DeliveryAddress deliveryAddress) {
         Person person = personRepository.findByUsername(username);

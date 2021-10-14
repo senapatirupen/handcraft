@@ -31,6 +31,8 @@ public interface OrderManagementService {
 
     Collection<Order> findOrdersByUserWithStatusSummary(String username);
 
+    Collection<Order> findOrdersByUserWithStatusClosed(String username);
+
     public Order addShippingAndDeliveryAndDeliveryAddressToOrder(String username, Long orderId, Long addressId,
                                                                  DeliveryAddress deliveryAddress);
 

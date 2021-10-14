@@ -190,18 +190,18 @@ public class UserInteractionServiceImpl implements UserInteractionService {
 
     @Override
     public UserDetail resetPassword(UserDetail userDetail){
-        userDetail = findUserDetailByUserName(userDetail.getUsername());
-        if(Objects.isNull(userDetail.getUsId())) {
+        UserDetail userDetail1 = findUserDetailByUserName(userDetail.getUsername());
+        if(Objects.isNull(userDetail1.getUsId())) {
             userDetail.setStatus("User Not Found");
             return userDetail;
         }
         else {
-            userDetail.setPassword(new BCryptPasswordEncoder().encode(userDetail.getPassword()));
-            userDetail.setRePassword(new BCryptPasswordEncoder().encode(userDetail.getRePassword()));
-            userDetail.setLastModifiedDate(new Date());
-            userDetailRepository.save(userDetail);
+            userDetail1.setPassword(new BCryptPasswordEncoder().encode(userDetail.getPassword()));
+            userDetail1.setRePassword(new BCryptPasswordEncoder().encode(userDetail.getRePassword()));
+            userDetail1.setLastModifiedDate(new Date());
+            userDetailRepository.save(userDetail1);
         }
-        return userDetail;
+        return userDetail1;
     }
 
 
