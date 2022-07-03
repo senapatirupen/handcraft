@@ -376,5 +376,33 @@ public class EcomHomeController {
         return "checkout";
     }
 
+    @RequestMapping(value = "/aboutus")
+    public String aboutUsPage(Model model, @ModelAttribute UserDetail userDetail) {
+        log.info("aboutUsPage() " + userDetail.getEmailId());
+        model.addAttribute("userDetail", userDetail);
+        return "aboutus";
+    }
+
+    @RequestMapping(value = "/contactus")
+    public String contactUsPage(Model model, @ModelAttribute UserDetail userDetail) {
+        log.info("contactUsPage() " + userDetail.getEmailId());
+        model.addAttribute("userDetail", userDetail);
+        return "contactus";
+    }
+
+    @RequestMapping(value = "/privacypolicy")
+    public String privacyPolicyPage(Model model, @ModelAttribute UserDetail userDetail) {
+        log.info("privacyPolicyPage() " + userDetail.getEmailId());
+        model.addAttribute("userDetail", userDetail);
+        return "privacypolicy";
+    }
+
+    @RequestMapping(value = "/termsofuse")
+    public String termsOfUsePage(Model model, @ModelAttribute UserDetail userDetail) {
+        log.info("termsOfUsePage() " + userDetail.getEmailId());
+        model.addAttribute("userDetail", userDetail);
+        return "termsofuse";
+    }
+
 
 }

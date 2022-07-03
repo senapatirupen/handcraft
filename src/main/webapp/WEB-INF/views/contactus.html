@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="template/craftlayout :: head">
+</head>
+
+<body>
+<div class="container-fluid m-0 p-0">
+
+    <!-- header -->
+    <div class="p-2">
+        <div th:replace="template/craftlayout :: header">Header</div>
+        <!-- navbar start -->
+        <div th:replace="template/craftlayout :: navbar">Nav Bar</div>
+        <!-- navbar end -->
+    </div>
+    <!-- header end -->
+    <div>
+        <h3 class="text-center">Pattachitra</h3>
+    </div>
+    <div class="row m-4">
+        <div class="col-12 m-1">
+            <div class="card border-warning">
+                <div class="card-header">
+                    Contact Us
+                </div>
+                <div class="card-body">
+                    <pre>
+                    Do you have a question? A complaint? Or do you need help while completing a transaction on Handcraft.com?
+                    For everything from your order, and your account to our site and our deals and services, call us on 90291 08282 or write to us using Handcraft Care page.
+                    The crew at Handcraft Care
+
+
+                    Call us at 9029108282
+                    Handcraft phone Customer support is now available 24/7.
+                    Meanwhile you can visit Handcraft.com Care page for self help.
+
+                    FAQ
+                    Frequently Asked Questions
+                        </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- footer start -->
+    <div th:replace="template/craftlayout :: footer">footer</div>
+    <!-- footer end -->
+</div>
+<script type="text/javascript" th:src="@{webjars/bootstrap/5.0.1/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{webjars/font-awesome/5.15.3/js/all.min.js}"></script>
+</body>
+
+</html>

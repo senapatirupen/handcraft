@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="template/craftlayout :: head">
+</head>
+
+<body>
+<div class="container-fluid m-0 p-0">
+
+    <!-- header -->
+    <div class="p-2">
+        <div th:replace="template/craftlayout :: header">Header</div>
+        <!-- navbar start -->
+        <div th:replace="template/craftlayout :: navbar">Nav Bar</div>
+        <!-- navbar end -->
+    </div>
+    <!-- header end -->
+    <div>
+        <h3 class="text-center">Pattachitra</h3>
+    </div>
+    <div class="row m-4">
+        <div class="col-12 m-1">
+            <div class="card border-warning">
+                <div class="card-header">
+                    About Us
+                </div>
+                <div class="card-body">
+                    <pre>
+                    Patachitra or Pattachitra is a general term for traditional, cloth-based scroll painting,
+                    based in the eastern Indian states of Odisha, West Bengal and parts of Bangladesh.
+                    Patachitra artform is known for its intricate details as well as mythological narratives and folktales inscribed in it.
+                    Pattachitra is one of the ancient artworks of Odisha, originally created for ritual use and as souvenirs for pilgrims to Puri,
+                    as well as other temples in Odisha. Patachitras are a component of an ancient Bengali narrative art,
+                    originally serving as a visual device during the performance of a song.
+                        </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- footer start -->
+    <div th:replace="template/craftlayout :: footer">footer</div>
+    <!-- footer end -->
+</div>
+<script type="text/javascript" th:src="@{webjars/bootstrap/5.0.1/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{webjars/font-awesome/5.15.3/js/all.min.js}"></script>
+</body>
+
+</html>
