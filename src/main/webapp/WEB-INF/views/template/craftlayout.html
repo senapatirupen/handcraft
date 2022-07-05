@@ -252,6 +252,22 @@
             <!-- Products items End -->
         </div>
 
+        <div class="container" th:fragment="error">
+            <!-- error start -->
+            <div class="p-5">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                    <div class="card m-2 p-4">
+                        <div class="card-body text-center">
+                            <h4>Something went wrong! </h4>
+                            <h5>Our Engineers are on it</h5>
+                            <a class="btn btn-warning" th:href="@{/}">Home</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- error End -->
+        </div>
+
         <div class=" container-fluid m-0 pt-4" th:fragment="footer">
             <footer class="pt-4" style="background-color:#1F4E5F;">
                 <div class="row">
