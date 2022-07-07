@@ -5,14 +5,15 @@
 </head>
 
 <body>
-<!-- header -->
-<div class="p-2">
-    <div th:replace="template/craftlayout :: header">Header</div>
-    <!-- navbar start -->
-    <div th:replace="template/craftlayout :: navbar">Nav Bar</div>
-    <!-- navbar end -->
-</div>
-<!-- header end -->
+<div class="container-fluid m-0 p-0">
+    <!-- header -->
+    <div class="p-2">
+        <div th:replace="template/craftlayout :: header">Header</div>
+        <!-- navbar start -->
+        <div th:replace="template/craftlayout :: navbar">Nav Bar</div>
+        <!-- navbar end -->
+    </div>
+    <!-- header end -->
     <div class="container">
         <div class="col-12 text-center"><h3>Product</h3></div>
         <!-- Products items start -->
@@ -21,14 +22,17 @@
                 <ul class="list-group">
                     <li class="list-group-item"><a class="list-group-item" th:href="@{/product}">Product</a></li>
                     <li class="list-group-item"><a class="list-group-item" th:href="@{/productadd}">Add Product</a></li>
-                    <li class="list-group-item active" aria-current="true"><a class="list-group-item" th:href="@{/productsearch}">Search Product</a></li>
-                    <li class="list-group-item"><a class="list-group-item" th:href="@{/productlist}">List Of Product</a></li>
+                    <li class="list-group-item active" aria-current="true"><a class="list-group-item"
+                                                                              th:href="@{/productsearch}">Search
+                        Product</a></li>
+                    <li class="list-group-item"><a class="list-group-item" th:href="@{/productlist}">List Of Product</a>
+                    </li>
                 </ul>
             </div>
 
             <div class="col-9 border">
                 <form action="#" th:action="@{/productedit}" th:object="${adminProduct}" method="post" class="row g-3">
-                    <input type="hidden" th:field="*{adPrId}" th:value="${adminProduct.adPrId}" name="adPrId" />
+                    <input type="hidden" th:field="*{adPrId}" th:value="${adminProduct.adPrId}" name="adPrId"/>
                     <div class="row m-2">
                         <div class="col-2">
                             <span>Name: </span>
@@ -52,7 +56,8 @@
                             <span>Status: </span>
                         </div>
                         <div class="col-8">
-                            <input type="text" class="form-control form-control-sm" id="status" th:field="*{productStatus}"
+                            <input type="text" class="form-control form-control-sm" id="status"
+                                   th:field="*{productStatus}"
                                    th:value="${adminProduct.productStatus}">
                         </div>
                     </div>
@@ -85,6 +90,7 @@
         </div>
     </div>
     <!-- Products items End -->
+</div>
 <!-- footer start -->
 <div th:replace="template/craftlayout :: footer">footer</div>
 <!-- footer end -->

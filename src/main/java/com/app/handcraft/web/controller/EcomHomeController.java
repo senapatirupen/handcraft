@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.util.*;
@@ -155,7 +156,7 @@ public class EcomHomeController {
 
     @RequestMapping(value = "/profileaddress")
     public String userProfileAddressPage(Model model, @ModelAttribute UserDetail userDetail) {
-        log.info("userProfileUpdatePage() " + userDetail.getEmailId());
+        log.info("userProfileAddressPage() " + userDetail.getEmailId());
         model.addAttribute("userDetail", userDetail);
         Set<Address> addresses = userInteractionService.allAddresses(userDetail.getUsername());
         if (!CollectionUtils.isEmpty(addresses)) {
@@ -176,15 +177,15 @@ public class EcomHomeController {
 
     @RequestMapping(value = "/profileaddressadd")
     public String userProfileAddressAddPage(Model model, @ModelAttribute UserDetail userDetail) {
-        log.info("userProfileUpdatePage() " + userDetail.getEmailId());
+        log.info("userProfileAddressAddPage() " + userDetail.getEmailId());
         model.addAttribute("userDetail", userDetail);
         model.addAttribute("address", new Address());
         return "profileaddressadd";
     }
 
     @RequestMapping(value = "/profileaddressadd", method = POST)
-    public String processUserProfileAddressAddPage(Model model, @ModelAttribute UserDetail userDetail, Address address) {
-        log.info("userProfileUpdatePage() " + userDetail.getEmailId());
+    public String userProfileAddressAddPage(Model model, @ModelAttribute UserDetail userDetail, Address address) {
+        log.info("userProfileAddressAddPage() " + userDetail.getEmailId());
         userInteractionService.createAddress(userDetail.getUsername(), address);
         model.addAttribute("userDetail", userDetail);
         return "redirect:profileaddress";
@@ -192,7 +193,7 @@ public class EcomHomeController {
 
     @RequestMapping(value = "/profileaddressedit")
     public String userProfileAddressEditPage(Model model, @ModelAttribute UserDetail userDetail, @RequestParam String id) {
-        log.info("userProfileUpdatePage() " + userDetail.getEmailId());
+        log.info("userProfileAddressEditPage() " + userDetail.getEmailId());
         Address address = userInteractionService.findAddress(userDetail.getUsername(), id);
         model.addAttribute("userDetail", userDetail);
         model.addAttribute("address", address);
@@ -201,7 +202,7 @@ public class EcomHomeController {
 
     @RequestMapping(value = "/profileaddressedit", method = POST)
     public String userProfileAddressUpdatePage(Model model, @ModelAttribute UserDetail userDetail, Address address) {
-        log.info("userProfileUpdatePage() " + userDetail.getEmailId());
+        log.info("userProfileAddressUpdatePage() " + userDetail.getEmailId());
         model.addAttribute("userDetail", userDetail);
         userInteractionService.updateAddress(userDetail.getUsername(), address);
         model.addAttribute("address", address);
@@ -210,7 +211,7 @@ public class EcomHomeController {
 
     @RequestMapping(value = "/profileaddressremove")
     public String userProfileAddressRemovePage(Model model, @ModelAttribute UserDetail userDetail, @RequestParam String id) {
-        log.info("userProfileUpdatePage() " + userDetail.getEmailId());
+        log.info("userProfileAddressRemovePage() " + userDetail.getEmailId());
         userInteractionService.removeAddress(userDetail.getUsername(), Long.parseLong(id));
         model.addAttribute("userDetail", userDetail);
         Set<Address> addresses = userInteractionService.allAddresses(userDetail.getUsername());
@@ -225,7 +226,7 @@ public class EcomHomeController {
 
     @RequestMapping(value = "/profileclosedorders")
     public String profileClosedOrdersPage(Model model, @ModelAttribute UserDetail userDetail) {
-        log.info("userProfileUpdatePage() " + userDetail.getEmailId());
+        log.info("profileClosedOrdersPage() " + userDetail.getEmailId());
         model.addAttribute("userDetail", userDetail);
         Collection<Order> orders = orderManagementService.findOrdersByUserWithStatusClosed(userDetail.getUsername());
         model.addAttribute("orders", orders);
@@ -262,17 +263,31 @@ public class EcomHomeController {
         return "productdetail";
     }
 
+    @RequestMapping(value = "/cottonworkproductdetail")
+    public String cottonWorkProductDetailPage(Model model, @ModelAttribute UserDetail userDetail, @RequestParam(value = "name", required = false) String name) {
+        log.info("cottonWorkProductDetailPage() " + userDetail.getEmailId());
+        model.addAttribute("userDetail", userDetail);
+//        Product product = orderManagementService.getProductByName(name);
+        Product product = new Product();
+        product.setName("p1");
+        product.setModel("p1");
+        model.addAttribute(product);
+        return "cottonworkproductdetail";
+    }
+
     @RequestMapping(value = "/addtocart")
-    public String addToCartPage(Model model, @ModelAttribute UserDetail userDetail, Product product) {
-        log.info("userProfileUpdatePage() " + userDetail.getEmailId());
+    public String addToCartPage(Model model, @ModelAttribute UserDetail userDetail, Product product, RedirectAttributes redirectAttributes) {
+        log.info("addToCartPage() " + userDetail.getEmailId());
         orderManagementService.addProductToCartByNameForUserName(userDetail.getUsername(), product.getName());
         model.addAttribute("userDetail", userDetail);
+        redirectAttributes.addFlashAttribute("message", "Item successfully added to cart");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
         return "redirect:products";
     }
 
     @RequestMapping(value = "/cart")
     public String cartPage(Model model, @ModelAttribute UserDetail userDetail) {
-        log.info("userProfileUpdatePage() " + userDetail.getEmailId());
+        log.info("cartPage() " + userDetail.getEmailId());
         model.addAttribute("userDetail", userDetail);
         Cart cart = orderManagementService.getCartByUserName(userDetail.getUsername());
         Set<Product> products = null;
@@ -303,7 +318,7 @@ public class EcomHomeController {
 
     @RequestMapping(value = "/placeorder")
     public String placeOrderPage(Model model, @ModelAttribute UserDetail userDetail, @RequestParam(value = "name", required = false) String name) {
-        log.info("userProfileUpdatePage() " + userDetail.getEmailId());
+        log.info("placeOrderPage() " + userDetail.getEmailId());
         model.addAttribute("userDetail", userDetail);
         Cart cart = orderManagementService.getCartByUserName(userDetail.getUsername());
         Order order = null;
@@ -335,7 +350,7 @@ public class EcomHomeController {
 
     @RequestMapping(value = "/adddeliveryaddress")
     public String addDeliveryAddressPage(Model model, @ModelAttribute UserDetail userDetail, Address address) {
-        log.info("userProfileUpdatePage() " + userDetail.getEmailId());
+        log.info("addDeliveryAddressPage() " + userDetail.getEmailId());
         model.addAttribute("userDetail", userDetail);
         Order order = orderManagementService.addBillingAddressToOrder(userDetail.getUsername(), address);
         Set<Product> products = orderManagementService.findProductByNames(order.getProductNames()).get();
@@ -350,7 +365,7 @@ public class EcomHomeController {
 
     @RequestMapping(value = "/orders")
     public String profileOrdersPage(Model model, @ModelAttribute UserDetail userDetail) {
-        log.info("userProfileUpdatePage() " + userDetail.getEmailId());
+        log.info("profileOrdersPage() " + userDetail.getEmailId());
         model.addAttribute("userDetail", userDetail);
         Collection<Order> orders = orderManagementService.findOrdersByUserWithStatusSummary(userDetail.getUsername());
         model.addAttribute("orders", orders);
@@ -371,7 +386,7 @@ public class EcomHomeController {
 
     @RequestMapping(value = "/buynow")
     public String buyNowPage(Model model, @ModelAttribute UserDetail userDetail) {
-        log.info("userProfileUpdatePage() " + userDetail.getEmailId());
+        log.info("buyNowPage() " + userDetail.getEmailId());
 //        model.addAttribute("address", "address");
         return "checkout";
     }
@@ -402,6 +417,34 @@ public class EcomHomeController {
         log.info("termsOfUsePage() " + userDetail.getEmailId());
         model.addAttribute("userDetail", userDetail);
         return "termsofuse";
+    }
+
+    @RequestMapping(value = "/cottonworkproductsone")
+    public String cottonWorkProductsOnePage(Model model, @ModelAttribute UserDetail userDetail) {
+        log.info("cottonWorkProductsOnePage() " + userDetail.getEmailId());
+        model.addAttribute("userDetail", userDetail);
+        return "cottonworkproductsone";
+    }
+
+    @RequestMapping(value = "/cottonworkproductstwo")
+    public String cottonWorkProductsTwoPage(Model model, @ModelAttribute UserDetail userDetail) {
+        log.info("cottonWorkProductsTwoPage() " + userDetail.getEmailId());
+        model.addAttribute("userDetail", userDetail);
+        return "cottonworkproductstwo";
+    }
+
+    @RequestMapping(value = "/cottonworkproductsthree")
+    public String cottonWorkProductsThreePage(Model model, @ModelAttribute UserDetail userDetail) {
+        log.info("cottonWorkProductsThreePage() " + userDetail.getEmailId());
+        model.addAttribute("userDetail", userDetail);
+        return "cottonworkproductsthree";
+    }
+
+    @RequestMapping(value = "/cottonworkproductsfour")
+    public String cottonWorkProductsFourPage(Model model, @ModelAttribute UserDetail userDetail) {
+        log.info("cottonWorkProductsFourPage() " + userDetail.getEmailId());
+        model.addAttribute("userDetail", userDetail);
+        return "cottonworkproductsfour";
     }
 
 
